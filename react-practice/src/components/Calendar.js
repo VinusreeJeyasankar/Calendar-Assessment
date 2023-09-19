@@ -72,20 +72,11 @@ function Calendar() {
     }
   
     // Disable past dates
-    if (cellDate < currentDate && !isToday(cellDate)) {
+    if (cellDate < currentDate) {
       arg.el.classList.add('fc-past');
       arg.el.title = 'Past Date';
     }
   };
-  
-  const isToday = (date) => {
-    return (
-      date.getDate() === currentDate.getDate() &&
-      date.getMonth() === currentDate.getMonth() &&
-      date.getFullYear() === currentDate.getFullYear()
-    );
-  };
-  
 
   const handleEventClick = (arg) => {
     const clickedEvent = arg.event;
