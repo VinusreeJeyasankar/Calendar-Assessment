@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Toast } from 'react-bootstrap';
 import BookingForm from './BookingForm';
 
 function BookModal({ show, handleClose, eventData, onDelete, isBookSlotModal }) {
   const [isToastVisible, setIsToastVisible] = useState(false);
   const [eventDetailsMode, setEventDetailsMode] = useState(false);
+
+  useEffect(() => {
+    setEventDetailsMode(false); // Reset eventDetailsMode when the modal updates
+  }, [show]);
 
   const handleBook = (formData) => {
     // Show the toast after booking
