@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import moment from "moment";
 import { useFormik } from "formik";
 import Select from "react-select";
@@ -6,16 +6,15 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "react-bootstrap";
 
+const recruiterOptions = [
+  { value: "Mark Collins", label: "Mark Collins" },
+  { value: "Tom Kelly", label: "Tom Kelly" },
+  { value: "Joseph Liberator", label: "Joseph Liberator" },
+  { value: "Jim Rogers", label: "Jim Rogers" },
+  { value: "Eric Goodwin", label: "Eric Goodwin" },
+];
+
 function BookingForm({ onSubmit, onClose }) {
-
-  const [recruiterOptions, setRecruiterOptions] = useState([
-    { value: "Mark Collins", label: "Mark Collins", slotsAssigned: 0 },
-    { value: "Tom Kelly", label: "Tom Kelly", slotsAssigned: 0 },
-    { value: "Joseph Liberator", label: "Joseph Liberator", slotsAssigned: 0 },
-    { value: "Jim Rogers", label: "Jim Rogers", slotsAssigned: 0 },
-    { value: "Eric Goodwin", label: "Eric Goodwin", slotsAssigned: 0 },
-  ]);
-
   const formik = useFormik({
     initialValues: {
       userName: "",
@@ -61,18 +60,6 @@ function BookingForm({ onSubmit, onClose }) {
       // Store the updated bookings in local storage
       localStorage.setItem("bookings", JSON.stringify(updatedBookings));
 
-      const updatedRecruiterOptions = recruiterOptions.map((recruiter) => {
-        if (
-          values.selectedRecruiter &&
-          recruiter.value === values.selectedRecruiter.value
-        ) {
-          return { ...recruiter, slotsAssigned: recruiter.slotsAssigned + 1 };
-        }
-        return recruiter;
-      });
-
-      setRecruiterOptions(updatedRecruiterOptions);
-
       onSubmit(values);
       onClose();
     },
@@ -108,14 +95,8 @@ function BookingForm({ onSubmit, onClose }) {
       return errors;
     },
   });
-  // Filter recruiters who have reached the selection limit
-  const filteredRecruiterOptions = recruiterOptions.filter(
-    (option) => option.slotsAssigned < 5
-  );
 
-  // Determine if the <Select> should be disabled
-  const isSelectDisabled = !filteredRecruiterOptions.length;
-  // Add the following function
+  // Filtering Booked times of the day
   const filterBookedTimes = (time) => {
     const selectedDate = formik.values.selectedDate;
     const existingBookings = JSON.parse(localStorage.getItem("bookings")) || [];
@@ -156,21 +137,12 @@ function BookingForm({ onSubmit, onClose }) {
           id="selectedRecruiter"
           name="selectedRecruiter"
           className="form-control form-control-lg"
-          options={filteredRecruiterOptions} // Use filtered options
+          options={recruiterOptions} // Use filtered options
           value={formik.values.selectedRecruiter}
-          onChange={(selectedOption) => {
-            formik.setFieldValue("selectedRecruiter", selectedOption);
-
-            const selectedRecruiter = selectedOption.value;
-            const recruiter = recruiterOptions.find(
-              (r) => r.value === selectedRecruiter
-            );
-            if (recruiter.slotsAssigned >= 5) {
-              formik.setFieldValue("selectedRecruiter", null);
-            }
-          }}
+          onChange={(selectedOption) =>
+            formik.setFieldValue("selectedRecruiter", selectedOption)
+          }
           isSearchable
-          isDisabled={isSelectDisabled} // Disable if no options available
         />
 
         {formik.touched.selectedRecruiter && formik.errors.selectedRecruiter ? (
