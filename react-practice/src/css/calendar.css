@@ -30,6 +30,7 @@
 .react-datepicker-wrapper,
 .react-datepicker {
   width: 100% !important; /* Set the desired width (adjust as needed) */
+  font-size: 17px !important;
 }
 .react-datepicker {
   width: 140% !important;
@@ -37,12 +38,14 @@
 .react-datepicker__month-container {
   width: 80% !important;
 }
-.react-datepicker__day,
+/* .react-datepicker__day,
 .react-datepicker__day-name {
   font-size: 16px;
-}
+} */
 .react-datepicker__time-container {
   width: 20% !important;
+  font-size: 18px;
+  padding: 12px;
 }
 .custom-modal {
   max-width: 80%; /* Set the desired width (you can adjust the percentage as needed) */
