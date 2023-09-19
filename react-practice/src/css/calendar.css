@@ -1,0 +1,50 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
+
+.fc-past {
+  opacity: 0.5;
+  /* Adjust the opacity to make past dates appear disabled */
+  pointer-events: none;
+  /* Disable pointer events for past dates */
+}
+/* to change the color of days in calendar */
+.fc-day {
+  color: #000000 !important;
+}
+/* Book slot button */
+.bookSlot-btn {
+  color: #fff;
+  background-color: aqua !important;
+}
+.heading {
+  text-align: center;
+  color: #fff;
+  background-color: #000;
+  padding: 20px;
+}
+/* Add styles for the holiday event card */
+.fc-event.fc-holiday {
+  background-color: #f8d7da; /* Add your preferred background color */
+  border-color: #f5c6cb; /* Add your preferred border color */
+  color: #721c24; /* Add your preferred text color */
+}
+.react-datepicker-wrapper,
+.react-datepicker {
+  width: 100% !important; /* Set the desired width (adjust as needed) */
+}
+.react-datepicker {
+  width: 140% !important;
+}
+.react-datepicker__month-container {
+  width: 80% !important;
+}
+.react-datepicker__day,
+.react-datepicker__day-name {
+  font-size: 16px;
+}
+.react-datepicker__time-container {
+  width: 20% !important;
+}
+.custom-modal {
+  max-width: 80%; /* Set the desired width (you can adjust the percentage as needed) */
+  margin: 0 auto; /* Center the modal horizontally */
+}
