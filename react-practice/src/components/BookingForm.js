@@ -15,6 +15,28 @@ const recruiterOptions = [
 ];
 
 function BookingForm({ onSubmit, onClose }) {
+  const maxRecruiterCount = 5;
+      const getFilteredRecruiters = () => {
+        const existingBookings = JSON.parse(localStorage.getItem("bookings")) || [];
+        const recruiterCounts = {};
+      
+        // Count the number of times each recruiter is chosen
+        existingBookings.forEach((booking) => {
+          const recruiter = booking.recruiter;
+          if (recruiterCounts[recruiter]) {
+            recruiterCounts[recruiter]++;
+          } else {
+            recruiterCounts[recruiter] = 1;
+          }
+        });
+      
+        // Filter the options to exclude recruiters that have reached the limit
+        return recruiterOptions.filter(
+          (recruiter) =>
+            !recruiterCounts[recruiter.value] ||
+            recruiterCounts[recruiter.value] < maxRecruiterCount
+        );
+      };
   const formik = useFormik({
     initialValues: {
       userName: "",
@@ -35,10 +57,27 @@ function BookingForm({ onSubmit, onClose }) {
         slotTime: formattedSlotTime, // Store formatted date and time
         recruiter: values.selectedRecruiter.value, // Store recruiter value
       };
+      const selectedRecruiter = values.selectedRecruiter.value;
 
       // Retrieve existing bookings from local storage or initialize an empty array
       const existingBookings =
         JSON.parse(localStorage.getItem("bookings")) || [];
+
+      // Count the number of times the selected recruiter is chosen
+      const recruiterCount = existingBookings.reduce((count, booking) => {
+        return booking.recruiter === selectedRecruiter ? count + 1 : count;
+      }, 0);
+
+      // Define the maximum number of times a recruiter can be chosen (in this case, 5)
+      const maxRecruiterCount = 5;
+      
+      if (recruiterCount >= maxRecruiterCount) {
+        alert(
+          `Recruiter ${selectedRecruiter} has already been chosen ${maxRecruiterCount} times.`
+        );
+        return;
+      }
+      
       // Check if the selected time slot is already booked
       const isTimeSlotBooked = existingBookings.some((booking) => {
         return (
@@ -111,6 +150,7 @@ function BookingForm({ onSubmit, onClose }) {
     // Disable the time if it's in the bookedTimes array
     return !bookedTimes.includes(moment(time).format("HH:mm"));
   };
+  
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="mb-3">
@@ -137,7 +177,7 @@ function BookingForm({ onSubmit, onClose }) {
           id="selectedRecruiter"
           name="selectedRecruiter"
           className="form-control form-control-lg"
-          options={recruiterOptions} // Use filtered options
+          options={getFilteredRecruiters()} // Use filtered options
           value={formik.values.selectedRecruiter}
           onChange={(selectedOption) =>
             formik.setFieldValue("selectedRecruiter", selectedOption)
