@@ -34,6 +34,7 @@
 }
 .react-datepicker {
   width: 140% !important;
+  color: #000 !important;
 }
 .react-datepicker__month-container {
   width: 80% !important;
@@ -50,4 +51,7 @@
 .custom-modal {
   max-width: 80%; /* Set the desired width (you can adjust the percentage as needed) */
   margin: 0 auto; /* Center the modal horizontally */
+}
+label{
+  font-size: 18px;
 }

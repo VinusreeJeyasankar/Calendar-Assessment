@@ -63,15 +63,29 @@ function Calendar() {
   };  
 
   const handleDayCellDidMount = (arg) => {
-    if (arg.date.getDay() === 5) {
+    const cellDate = arg.date;
+  
+    // Disable Fridays (day 5)
+    if (cellDate.getDay() === 5) {
       arg.el.classList.add('fc-read-only');
       arg.el.title = 'Holiday';
     }
-    if (arg.date < currentDate) {
+  
+    // Disable past dates
+    if (cellDate < currentDate && !isToday(cellDate)) {
       arg.el.classList.add('fc-past');
       arg.el.title = 'Past Date';
     }
   };
+  
+  const isToday = (date) => {
+    return (
+      date.getDate() === currentDate.getDate() &&
+      date.getMonth() === currentDate.getMonth() &&
+      date.getFullYear() === currentDate.getFullYear()
+    );
+  };
+  
 
   const handleEventClick = (arg) => {
     const clickedEvent = arg.event;
