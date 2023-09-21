@@ -22,7 +22,23 @@ function BookingForm({ onSubmit, onClose }) {
     const existingBookings = JSON.parse(localStorage.getItem("bookings")) || [];
     return existingBookings.filter(booking => booking.recruiter === recruiterName).length;
   };
-  
+  // Displaying time slot based on the recruiters availabilty
+  const filterBookedTimes = (time, selectedRecruiter) => {
+    const selectedDate = formik.values.selectedDate;
+    const existingBookings = JSON.parse(localStorage.getItem("bookings")) || [];
+
+    // Filter out the booked times for the selected date and recruiter
+    const bookedTimes = existingBookings
+      .filter((booking) =>
+        moment(booking.selectedDate).isSame(selectedDate, "day") &&
+        booking.recruiter === selectedRecruiter
+      )
+      .map((booking) => moment(booking.slotTime).format("HH:mm"));
+
+    // Disable the time if it's in the bookedTimes array
+    return !bookedTimes.includes(moment(time).format("HH:mm"));
+  };
+
   const formik = useFormik({
     initialValues: {
       userName: "",
@@ -46,15 +62,15 @@ function BookingForm({ onSubmit, onClose }) {
       };
 
       // Retrieve existing bookings from local storage or initialize an empty array
-      const existingBookings =
-        JSON.parse(localStorage.getItem("bookings")) || [];
+      const existingBookings = JSON.parse(localStorage.getItem("bookings")) || [];
 
       // Check if the selected time slot is already booked
       const isTimeSlotBooked = existingBookings.some((booking) => {
         return (
           moment(booking.selectedDate).isSame(values.selectedDate, "day") &&
           moment(booking.slotTime).format("HH:mm") ===
-            moment(values.selectedDate).format("HH:mm")
+            moment(values.selectedDate).format("HH:mm") &&
+          booking.recruiter === values.selectedRecruiter.value
         );
       });
 
@@ -75,22 +91,6 @@ function BookingForm({ onSubmit, onClose }) {
     },
 
   });
-
-  // Filtering Booked times of the day
-  const filterBookedTimes = (time) => {
-    const selectedDate = formik.values.selectedDate;
-    const existingBookings = JSON.parse(localStorage.getItem("bookings")) || [];
-
-    // Filter out the booked times for the selected date
-    const bookedTimes = existingBookings
-      .filter((booking) =>
-        moment(booking.selectedDate).isSame(selectedDate, "day")
-      )
-      .map((booking) => moment(booking.slotTime).format("HH:mm"));
-
-    // Disable the time if it's in the bookedTimes array
-    return !bookedTimes.includes(moment(time).format("HH:mm"));
-  };
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -155,7 +155,9 @@ function BookingForm({ onSubmit, onClose }) {
             minTime={new Date().setHours(9, 30)} // Set minTime to 9:30 AM
             maxTime={new Date().setHours(19, 0)} // Set maxTime to 7:00 PM
             filterDate={(date) => date.getDay() !== 5} // Disable Fridays
-            filterTime={(time) => filterBookedTimes(time)}
+            filterTime={(time) =>
+              filterBookedTimes(time, formik.values.selectedRecruiter.value)
+            } // Pass selected recruiter value to filterBookedTimes
             autoComplete="off"
           />
           {formik.touched.selectedDate && formik.errors.selectedDate ? (
