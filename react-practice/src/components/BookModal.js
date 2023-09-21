@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Toast } from 'react-bootstrap';
-import BookingForm from './BookingForm';
+import React, { useState, useEffect } from "react";
+import { Modal, Toast } from "react-bootstrap";
+import BookingForm from "./BookingForm";
 
-function BookModal({ show, handleClose, eventData, onDelete, isBookSlotModal }) {
+function BookModal({ show, handleClose, eventData, isBookSlotModal }) {
   const [isToastVisible, setIsToastVisible] = useState(false);
   const [eventDetailsMode, setEventDetailsMode] = useState(false);
 
@@ -20,7 +20,7 @@ function BookModal({ show, handleClose, eventData, onDelete, isBookSlotModal }) 
       <Modal show={show} onHide={handleClose} dialogClassName="custom-modal">
         <Modal.Header closeButton>
           <Modal.Title>
-            {eventDetailsMode ? 'Event Details' : 'Book Slot'}
+            {eventDetailsMode ? "Event Details" : "Book Slot"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -36,17 +36,17 @@ function BookModal({ show, handleClose, eventData, onDelete, isBookSlotModal }) 
                   <p>Recruiter: {booking.recruiter}</p>
                   <p>Title: {booking.title}</p>
                   <p>Message: {booking.message}</p>
-                  <p>Time Slot: {new Date(booking.slotTime).toLocaleString()}</p>
+                  <p>
+                    Time Slot: {new Date(booking.slotTime).toLocaleString()}
+                  </p>
                 </div>
               ))}
-              {!isBookSlotModal && ( // Conditionally render the button
-                <button
-                  className="btn btn-danger"
-                  onClick={onDelete} // Call onDelete when the delete button is clicked
-                >
-                  Delete Event
-                </button>
-              )}
+              <button className="btn btn-secondary back" onClick={() => setEventDetailsMode(false)}>
+                Back
+              </button>
+              <button className="btn btn-danger" onClick={handleClose}>
+                Close
+              </button>
             </div>
           ) : (
             // Display booking form for booking slots
@@ -55,14 +55,15 @@ function BookModal({ show, handleClose, eventData, onDelete, isBookSlotModal }) 
         </Modal.Body>
 
         <Modal.Footer>
-          {!eventDetailsMode && !isBookSlotModal && ( // Conditionally render the button
-            <button
-              className="btn btn-primary"
-              onClick={() => setEventDetailsMode(true)}
-            >
-              Show Event Details
-            </button>
-          )}
+          {!eventDetailsMode &&
+            !isBookSlotModal && ( // Conditionally render the button
+              <button
+                className="btn btn-primary"
+                onClick={() => setEventDetailsMode(true)}
+              >
+                Show Event Details
+              </button>
+            )}
         </Modal.Footer>
       </Modal>
 
@@ -72,9 +73,9 @@ function BookModal({ show, handleClose, eventData, onDelete, isBookSlotModal }) 
         delay={4000}
         autohide
         style={{
-          position: 'fixed',
-          top: '20px',
-          right: '20px',
+          position: "fixed",
+          top: "20px",
+          right: "20px",
         }}
       >
         <Toast.Header>
