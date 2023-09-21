@@ -71,12 +71,20 @@ function Calendar() {
       arg.el.title = 'Holiday';
     }
   
-    // Disable past dates
-    if (cellDate < currentDate) {
+    // Disable past dates (except current date)
+    if (cellDate < currentDate && !isSameDay(cellDate, currentDate)) {
       arg.el.classList.add('fc-past');
       arg.el.title = 'Past Date';
     }
   };
+  
+  function isSameDay(date1, date2) {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
+  }  
 
   const handleEventClick = (arg) => {
     const clickedEvent = arg.event;
@@ -104,31 +112,6 @@ function Calendar() {
     setIsEventModal(true);
     setIsModalOpen(true);
   };
-  
-  const handleDeleteEvent = () => {
-    if (!selectedEvent || !selectedEvent.title) {
-      console.error('No event selected or event has no title');
-      return;
-    }
-  
-    const updatedEvents = events.filter(event => (
-      event.title !== selectedEvent.title ||
-      new Date(event.start).toString() !== new Date(selectedEvent.start).toString()
-    ));
-  
-    setEvents(updatedEvents);
-  
-    const storedBookings = JSON.parse(localStorage.getItem('bookings')) || [];
-    const updatedBookings = storedBookings.filter(booking => (
-      booking.title !== selectedEvent.title ||
-      new Date(booking.slotTime).toString() !== new Date(selectedEvent.start).toString()
-    ));
-      
-    localStorage.setItem('bookings', JSON.stringify(updatedBookings));
-  
-    setIsEventModal(false);
-    setIsModalOpen(false);
-  };  
   
   const handleViewToggle = () => {
     const newView = view === 'dayGridMonth' ? 'dayGridWeek' : 'dayGridMonth';
@@ -166,7 +149,7 @@ function Calendar() {
           eventClick={handleEventClick}
         />
       </div>
-      <BookModal show={isModalOpen} handleClose={handleCloseModal} eventData={selectedEvent} onDelete={handleDeleteEvent} isBookSlotModal={!isEventModal} />
+      <BookModal show={isModalOpen} handleClose={handleCloseModal} eventData={selectedEvent} isBookSlotModal={!isEventModal} />
     </div>
   );
 }

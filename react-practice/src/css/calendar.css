@@ -55,3 +55,9 @@
 label{
   font-size: 18px;
 }
+.close{
+  margin-left: 10px;
+}
+.back{
+  margin-right: 10px;
+}
