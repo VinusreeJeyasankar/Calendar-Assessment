@@ -18,10 +18,14 @@ const recruiterOptions = [
 function BookingForm({ onSubmit, onClose }) {
   const maxRecruiterCount = 5;
   
-  const getRecruiterCount = (recruiterName) => {
+  const getRecruiterCount = (recruiterName, selectedDate) => {
     const existingBookings = JSON.parse(localStorage.getItem("bookings")) || [];
-    return existingBookings.filter(booking => booking.recruiter === recruiterName).length;
+    return existingBookings.filter(booking =>
+      moment(booking.selectedDate).isSame(selectedDate, "day") &&
+      booking.recruiter === recruiterName
+    ).length;
   };
+  
   // Displaying time slot based on the recruiters availabilty
   const filterBookedTimes = (time, selectedRecruiter) => {
     const selectedDate = formik.values.selectedDate;
@@ -38,12 +42,12 @@ function BookingForm({ onSubmit, onClose }) {
     // Disable the time if it's in the bookedTimes array
     return !bookedTimes.includes(moment(time).format("HH:mm"));
   };
-
+  
   const formik = useFormik({
     initialValues: {
       userName: "",
       selectedRecruiter: null,
-      selectedDate: null,
+      selectedDate: new Date(),
       title: "", // Add title field
       message: "", // Add message field
       slotTime: null,
@@ -120,7 +124,7 @@ function BookingForm({ onSubmit, onClose }) {
           className="form-control form-control-lg"
           options={recruiterOptions.map((recruiter) => ({
             ...recruiter,
-            isDisabled: getRecruiterCount(recruiter.value) >= maxRecruiterCount,
+            isDisabled: getRecruiterCount(recruiter.value, formik.values.selectedDate) >= maxRecruiterCount,
           }))}
           value={formik.values.selectedRecruiter}
           onChange={(selectedOption) =>
@@ -156,8 +160,11 @@ function BookingForm({ onSubmit, onClose }) {
             maxTime={new Date().setHours(19, 0)} // Set maxTime to 7:00 PM
             filterDate={(date) => date.getDay() !== 5} // Disable Fridays
             filterTime={(time) =>
-              filterBookedTimes(time, formik.values.selectedRecruiter.value)
-            } // Pass selected recruiter value to filterBookedTimes
+              formik.values.selectedRecruiter?.value 
+                ? filterBookedTimes(time, formik.values.selectedRecruiter.value)
+                : true
+            }
+            // Pass selected recruiter value to filterBookedTimes
             autoComplete="off"
           />
           {formik.touched.selectedDate && formik.errors.selectedDate ? (
