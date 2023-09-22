@@ -17,6 +17,8 @@
 /* to change the color of days in calendar */
 .fc-day {
   color: #000000 !important;
+  width: 50px !important;
+  height: 50px !important;
 }
 .clicked-date{
   background-color: #f0c39a;
@@ -80,4 +82,35 @@ label, .noBookings{
 }
 .back{
   margin-right: 10px;
+}
+/* Screen sizes */
+
+/* Set a maximum width for the calendar */
+.full-calendar-container {
+  max-width: 100%;
+}
+
+/* The calendar scales down on smaller screens */
+.fc-view {
+  min-height: 0; /* Allows the calendar to shrink */
+}
+
+/* Define styles for the calendar header */
+.fc-toolbar {
+  margin-bottom: 1em; /* Add some space below the header */
+}
+
+/* Define styles for the buttons in the header */
+.fc-button {
+  margin: 0 0.5em; /* Adjust the spacing between buttons */
+}
+/* Adjust styles for smaller screens */
+@media (max-width: 767px) {
+  .fc-toolbar {
+    text-align: center; /* Center align the header buttons */
+  }
+
+  .fc-button {
+    margin: 0.2em; /* Adjust the spacing for smaller screens */
+  }
 }
