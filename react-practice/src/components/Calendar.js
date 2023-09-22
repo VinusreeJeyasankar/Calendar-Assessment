@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../css/calendar.css";
+import "../assets/css/calendar.css";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -40,16 +40,16 @@ function Calendar() {
     if (arg.date.getDay() === 5) {
       return;
     }
-  
+    
     const clickedDate = arg.date;
     setClickedDate(clickedDate); // Update clicked date
-  
+
     // Remove background from previously selected date
     const prevSelectedDateEl = document.querySelector(".clicked-date");
     if (prevSelectedDateEl) {
       prevSelectedDateEl.classList.remove("clicked-date");
     }
-  
+
     // Check if the clicked date is in the future
     if (clickedDate > currentDate) {
       // Check if there are no bookings scheduled for the clicked date
@@ -57,7 +57,7 @@ function Calendar() {
         (event) =>
           new Date(event.start).toISOString() !== clickedDate.toISOString()
       );
-  
+      
       if (hasNoBookings) {
         // If there are no bookings, display a message in the modal
         setSelectedEvent({
@@ -65,23 +65,22 @@ function Calendar() {
           start: clickedDate,
           bookings: [],
         });
-  
+
         setIsEventModal(true);
         setIsModalOpen(true);
-  
+
         // Set the default slotTime to the selected date and time
         const defaultSlotTime = new Date(clickedDate);
         setSelectedEvent((prevEvent) => ({
           ...prevEvent,
           slotTime: defaultSlotTime,
         }));
-  
+
         // Add a class to the clicked date's element
         arg.dayEl.classList.add("clicked-date");
       }
     }
   };
-  
 
   const handleDayCellDidMount = (arg) => {
     const cellDate = arg.date;
@@ -144,49 +143,53 @@ function Calendar() {
   };
 
   function getCustomTitle() {
-    const monthName = clickedDate.toLocaleString("default", { month: "long" });
+    const day = clickedDate.getDate().toString().padStart(2, "0");
+    const month = (clickedDate.getMonth() + 1).toString().padStart(2, "0"); // Month is 0-indexed
     const year = clickedDate.getFullYear();
-    const day = clickedDate.getDate();
-    return `${monthName} ${year} - ${day}`; // Format the title
+    return `${day}-${month}-${year}`;
   }
+  // console.log("selectedEvent", selectedEvent); 
   return (
-    <div className="m-5">
+    <div>
       <h2 className="heading">Appointment Booking</h2>
-      <div className="m-5">
-        <FullCalendar
-          ref={calendarRef}
-          plugins={[dayGridPlugin, interactionPlugin]}
-          initialView={view}
-          headerToolbar={{
-            left: "prev,next today",
-            center: "title customTitle", // Use custom title format
-            right: "bookSlotButton viewToggle", // Add viewToggle button
-          }}
-          customButtons={{
-            bookSlotButton: {
-              text: "Book Slot",
-              className: "btn btn-primary",
-              click: handleBookSlotClick,
-            },
-            viewToggle: {
-              text: "Toggle View",
-              click: handleViewToggle, // Toggle view on click
-            },
-            customTitle: {
-              text: getCustomTitle(), // Use a function to generate the title
-            },
-          }}
-          dateClick={handleDateClick}
-          dayCellDidMount={handleDayCellDidMount}
-          events={events}
-          eventClick={handleEventClick}
-        />
+      <div className="row m-5">
+        <div className="col-md-12">
+          <FullCalendar
+            ref={calendarRef}
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView={view}
+            headerToolbar={{
+              left: "prev,next today",
+              center: "title customTitle", // Use custom title format
+              right: "bookSlotButton viewToggle", // Add viewToggle button
+            }}
+            customButtons={{
+              bookSlotButton: {
+                text: "Book Slot",
+                className: "btn btn-primary",
+                click: handleBookSlotClick,
+              },
+              viewToggle: {
+                text: "Toggle View",
+                click: handleViewToggle, // Toggle view on click
+              },
+              customTitle: {
+                text: getCustomTitle(), // Use a function to generate the title
+              },
+            }}
+            dateClick={handleDateClick}
+            dayCellDidMount={handleDayCellDidMount}
+            events={events}
+            eventClick={handleEventClick}
+          />
+        </div>
       </div>
       <BookModal
         show={isModalOpen}
         handleClose={handleCloseModal}
         eventData={selectedEvent}
         isBookSlotModal={!isEventModal}
+        selectedDate={clickedDate} // Pass selectedDate prop here
       />
     </div>
   );
