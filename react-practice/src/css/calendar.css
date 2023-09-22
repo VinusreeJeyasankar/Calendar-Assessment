@@ -72,7 +72,7 @@
   max-width: 80%; /* Set the desired width (you can adjust the percentage as needed) */
   margin: 0 auto; /* Center the modal horizontally */
 }
-label{
+label, .noBookings{
   font-size: 18px;
 }
 .close{
