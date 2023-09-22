@@ -40,10 +40,16 @@ function Calendar() {
     if (arg.date.getDay() === 5) {
       return;
     }
-
+  
     const clickedDate = arg.date;
     setClickedDate(clickedDate); // Update clicked date
-
+  
+    // Remove background from previously selected date
+    const prevSelectedDateEl = document.querySelector(".clicked-date");
+    if (prevSelectedDateEl) {
+      prevSelectedDateEl.classList.remove("clicked-date");
+    }
+  
     // Check if the clicked date is in the future
     if (clickedDate > currentDate) {
       // Check if there are no bookings scheduled for the clicked date
@@ -51,7 +57,7 @@ function Calendar() {
         (event) =>
           new Date(event.start).toISOString() !== clickedDate.toISOString()
       );
-
+  
       if (hasNoBookings) {
         // If there are no bookings, display a message in the modal
         setSelectedEvent({
@@ -59,22 +65,23 @@ function Calendar() {
           start: clickedDate,
           bookings: [],
         });
-
+  
         setIsEventModal(true);
         setIsModalOpen(true);
-
+  
         // Set the default slotTime to the selected date and time
         const defaultSlotTime = new Date(clickedDate);
         setSelectedEvent((prevEvent) => ({
           ...prevEvent,
           slotTime: defaultSlotTime,
         }));
-
+  
         // Add a class to the clicked date's element
         arg.dayEl.classList.add("clicked-date");
       }
     }
   };
+  
 
   const handleDayCellDidMount = (arg) => {
     const cellDate = arg.date;
