@@ -17,8 +17,6 @@
 /* to change the color of days in calendar */
 .fc-day {
   color: #000000 !important;
-  width: 50px !important;
-  height: 50px !important;
 }
 .clicked-date{
   background-color: #f0c39a;
@@ -93,6 +91,7 @@ label, .noBookings{
 /* The calendar scales down on smaller screens */
 .fc-view {
   min-height: 0; /* Allows the calendar to shrink */
+  margin: auto;
 }
 
 /* Define styles for the calendar header */
