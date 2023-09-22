@@ -129,6 +129,7 @@ function BookingForm({ onSubmit, onClose }) {
           id="userName"
           name="userName"
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur} // Add onBlur event handler
           value={formik.values.userName}
         />
         {formik.touched.userName && formik.errors.userName ? (
@@ -173,6 +174,7 @@ function BookingForm({ onSubmit, onClose }) {
             className="form-control form-control-lg"
             selected={formik.values.selectedDate}
             onChange={(date) => formik.setFieldValue("selectedDate", date)}
+            onBlur={formik.handleBlur} // Add onBlur event handler
             showTimeSelect
             timeFormat="HH:mm"
             timeIntervals={30}
@@ -205,6 +207,7 @@ function BookingForm({ onSubmit, onClose }) {
           id="title"
           name="title"
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur} // Add onBlur event handler
           value={formik.values.title}
         />
         {formik.touched.title && formik.errors.title ? (
@@ -220,6 +223,7 @@ function BookingForm({ onSubmit, onClose }) {
           id="message"
           name="message"
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur} // Add onBlur event handler
           value={formik.values.message}
         />
         {formik.touched.message && formik.errors.message ? (
