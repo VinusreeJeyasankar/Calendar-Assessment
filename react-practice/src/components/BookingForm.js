@@ -17,15 +17,15 @@ const recruiterOptions = [
 
 function BookingForm({ onSubmit, onClose }) {
   const maxRecruiterCount = 5;
-  
+
   const getRecruiterCount = (recruiterName, selectedDate) => {
     const existingBookings = JSON.parse(localStorage.getItem("bookings")) || [];
-    return existingBookings.filter(booking =>
-      moment(booking.selectedDate).isSame(selectedDate, "day") &&
-      booking.recruiter === recruiterName
+    return existingBookings.filter(
+      (booking) =>
+        moment(booking.selectedDate).isSame(selectedDate, "day") &&
+        booking.recruiter === recruiterName
     ).length;
   };
-  
   // Displaying time slot based on the recruiters availabilty
   const filterBookedTimes = (time, selectedRecruiter) => {
     const selectedDate = formik.values.selectedDate;
@@ -33,16 +33,17 @@ function BookingForm({ onSubmit, onClose }) {
 
     // Filter out the booked times for the selected date and recruiter
     const bookedTimes = existingBookings
-      .filter((booking) =>
-        moment(booking.selectedDate).isSame(selectedDate, "day") &&
-        booking.recruiter === selectedRecruiter
+      .filter(
+        (booking) =>
+          moment(booking.selectedDate).isSame(selectedDate, "day") &&
+          booking.recruiter === selectedRecruiter
       )
       .map((booking) => moment(booking.slotTime).format("HH:mm"));
 
     // Disable the time if it's in the bookedTimes array
     return !bookedTimes.includes(moment(time).format("HH:mm"));
   };
-  
+
   const formik = useFormik({
     initialValues: {
       userName: "",
@@ -66,7 +67,8 @@ function BookingForm({ onSubmit, onClose }) {
       };
 
       // Retrieve existing bookings from local storage or initialize an empty array
-      const existingBookings = JSON.parse(localStorage.getItem("bookings")) || [];
+      const existingBookings =
+        JSON.parse(localStorage.getItem("bookings")) || [];
 
       // Check if the selected time slot is already booked
       const isTimeSlotBooked = existingBookings.some((booking) => {
@@ -93,8 +95,27 @@ function BookingForm({ onSubmit, onClose }) {
       onSubmit(values);
       onClose();
     },
-
   });
+
+  // Check if all recruiters have reached their limit for the selected day
+  const isAllRecruitersFull = recruiterOptions.every((recruiter) => {
+    const selectedDate = formik.values.selectedDate;
+    return (
+      getRecruiterCount(recruiter.value, selectedDate) >= maxRecruiterCount
+    );
+  });
+
+  if (isAllRecruitersFull) {
+    return (
+      <>
+        <div className="noBookings mb-3">
+          No Recruiters or bookings available for this day,{" "}
+          {moment(formik.values.selectedDate).format("MMMM D, YYYY")}.
+        </div>
+        <button className="btn btn-danger" onClick={onClose}>Close</button>
+      </>
+    );
+  }
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -124,7 +145,9 @@ function BookingForm({ onSubmit, onClose }) {
           className="form-control form-control-lg"
           options={recruiterOptions.map((recruiter) => ({
             ...recruiter,
-            isDisabled: getRecruiterCount(recruiter.value, formik.values.selectedDate) >= maxRecruiterCount,
+            isDisabled:
+              getRecruiterCount(recruiter.value, formik.values.selectedDate) >=
+              maxRecruiterCount,
           }))}
           value={formik.values.selectedRecruiter}
           onChange={(selectedOption) =>
@@ -160,7 +183,7 @@ function BookingForm({ onSubmit, onClose }) {
             maxTime={new Date().setHours(19, 0)} // Set maxTime to 7:00 PM
             filterDate={(date) => date.getDay() !== 5} // Disable Fridays
             filterTime={(time) =>
-              formik.values.selectedRecruiter?.value 
+              formik.values.selectedRecruiter?.value
                 ? filterBookedTimes(time, formik.values.selectedRecruiter.value)
                 : true
             }
