@@ -1,4 +1,6 @@
 import React from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { setFormField, selectFormField } from "../features/bookings/BookingFormSlice";
 import moment from "moment";
 import { useFormik } from "formik";
 import Select from "react-select";
@@ -131,6 +133,7 @@ function BookingForm({ onSubmit, onClose }) {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur} // Add onBlur event handler
           value={formik.values.userName}
+          autoComplete="ON"
         />
         {formik.touched.userName && formik.errors.userName ? (
           <div className="text-danger">{formik.errors.userName}</div>
@@ -141,7 +144,7 @@ function BookingForm({ onSubmit, onClose }) {
           Select Recruiter
         </label>
         <Select
-          id="selectedRecruiter"
+          inputId="selectedRecruiter" // Add this line to specify the id
           name="selectedRecruiter"
           className="form-control form-control-lg"
           options={recruiterOptions.map((recruiter) => ({
