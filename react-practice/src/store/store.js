@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import bookingFormReducer from "../features/bookings/BookingFormSlice";
+import bookingFormReducer from "./bookings/BookingFormSlice";
 
 const store = configureStore({
   reducer: {
