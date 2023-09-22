@@ -17,7 +17,7 @@ const recruiterOptions = [
   { value: "Eric Goodwin", label: "Eric Goodwin" },
 ];
 
-function BookingForm({ onSubmit, onClose }) {
+function BookingForm({ onSubmit, onClose, selectedDate }) {
   const maxRecruiterCount = 5;
 
   const getRecruiterCount = (recruiterName, selectedDate) => {
@@ -50,7 +50,7 @@ function BookingForm({ onSubmit, onClose }) {
     initialValues: {
       userName: "",
       selectedRecruiter: null,
-      selectedDate: new Date(),
+      selectedDate: null,
       title: "", // Add title field
       message: "", // Add message field
       slotTime: null,
@@ -118,6 +118,13 @@ function BookingForm({ onSubmit, onClose }) {
       </>
     );
   }
+  //move to next day if the current day is friday
+  const today = new Date();
+  const isFriday = today.getDay() === 5;
+
+  const defaultSelectedDate = isFriday
+    ? moment(today).add(1, 'day').toDate()
+    : selectedDate || today;
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -175,7 +182,7 @@ function BookingForm({ onSubmit, onClose }) {
             id="selectedDate"
             name="selectedDate"
             className="form-control form-control-lg"
-            selected={formik.values.selectedDate}
+            selected={formik.values.selectedDate || defaultSelectedDate || new Date()} // Use selectedDate prop here
             onChange={(date) => formik.setFieldValue("selectedDate", date)}
             onBlur={formik.handleBlur} // Add onBlur event handler
             showTimeSelect
