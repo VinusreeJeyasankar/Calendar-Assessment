@@ -111,7 +111,7 @@ function Calendar() {
 
   const handleEventClick = (arg) => {
     const clickedEvent = arg.event;
-
+    
     if (!clickedEvent) {
       console.error("Event data not found");
       return;
