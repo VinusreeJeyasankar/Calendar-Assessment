@@ -41,6 +41,10 @@ function Calendar() {
   // Click event - for selected Dates
   const handleDateClick = (arg) => {
     const clickedDate = arg.date;
+    // Check if the clicked date is a Friday (day 5)
+    if (clickedDate.getDay() === 5) {
+      return; // Do nothing if it's a Friday
+    }
     const today = new Date();
     today.setDate(today.getDate() - 1); // Subtract one day
 
