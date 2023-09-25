@@ -74,10 +74,11 @@
 .custom-modal {
   max-width: 50%; /* Set the desired width (you can adjust the percentage as needed) */
   margin: 0 auto; /* Center the modal horizontally */
+  font-size: 16px !important;
 }
 label,
 .noBookings {
-  font-size: 18px;
+  font-size: 16px;
 }
 .close {
   margin-left: 10px;
@@ -105,7 +106,7 @@ label,
 }
 /* Month name on full calendar */
 .fc-toolbar-title {
-  font-size: larger !important;
+  font-size: 22px !important;
   margin-top: 5px !important;
   margin-left: 5px !important;
 }
@@ -135,6 +136,9 @@ label,
   .fc-toolbar-title {
     font-size: larger !important;
     align-items: center;
+  }
+  .fc-customTitle-button {
+    margin-top: 8px !important;
   }
   .full-calendar-container {
     max-width: 100%; /* Adjust the percentage as needed */
