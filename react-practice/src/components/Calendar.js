@@ -7,6 +7,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import BookModal from "./BookModal";
 
 const currentDate = new Date();
+currentDate.setDate(currentDate.getDate() - 1); // Subtract one day
 
 function Calendar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,6 +16,7 @@ function Calendar() {
   const [isEventModal, setIsEventModal] = useState(false);
   const [view, setView] = useState("dayGridMonth"); // Default view is 'dayGridMonth'
   const [clickedDate, setClickedDate] = useState(currentDate); // Add state for clicked date
+  const [eventDetailsMode, setEventDetailsMode] = useState(false);
   const calendarRef = useRef(null);
 
   useEffect(() => {
@@ -29,6 +31,7 @@ function Calendar() {
   const handleBookSlotClick = () => {
     setIsModalOpen(true);
     setIsEventModal(false);
+    setEventDetailsMode(false); // Automatically show event details mode
   };
 
   const handleCloseModal = () => {
@@ -37,11 +40,16 @@ function Calendar() {
 
   // Click event - for selected Dates
   const handleDateClick = (arg) => {
-    if (arg.date.getDay() === 5) {
+    const clickedDate = arg.date;
+    const today = new Date();
+    today.setDate(today.getDate() - 1); // Subtract one day
+
+    // Check if the clicked date is in the past
+    if (clickedDate < today) {
+      // If it's in the past, prevent further actions
       return;
     }
-    
-    const clickedDate = arg.date;
+
     setClickedDate(clickedDate); // Update clicked date
 
     // Remove background from previously selected date
@@ -50,35 +58,33 @@ function Calendar() {
       prevSelectedDateEl.classList.remove("clicked-date");
     }
 
-    // Check if the clicked date is in the future
-    if (clickedDate > currentDate) {
-      // Check if there are no bookings scheduled for the clicked date
-      const hasNoBookings = events.every(
-        (event) =>
-          new Date(event.start).toISOString() !== clickedDate.toISOString()
-      );
-      
-      if (hasNoBookings) {
-        // If there are no bookings, display a message in the modal
-        setSelectedEvent({
-          title: "No booking is scheduled for today!!",
-          start: clickedDate,
-          bookings: [],
-        });
+    // Check if there are no bookings scheduled for the clicked date
+    const hasNoBookings = events.every(
+      (event) =>
+        new Date(event.start).toISOString() !== clickedDate.toISOString()
+    );
 
-        setIsEventModal(true);
-        setIsModalOpen(true);
+    if (hasNoBookings) {
+      // If there are no bookings, display a message in the modal
+      setSelectedEvent({
+        title: "No booking is scheduled for today!!",
+        start: clickedDate,
+        bookings: [],
+      });
 
-        // Set the default slotTime to the selected date and time
-        const defaultSlotTime = new Date(clickedDate);
-        setSelectedEvent((prevEvent) => ({
-          ...prevEvent,
-          slotTime: defaultSlotTime,
-        }));
+      setIsEventModal(true);
+      setIsModalOpen(true);
+      setEventDetailsMode(true); // Automatically show event details mode
 
-        // Add a class to the clicked date's element
-        arg.dayEl.classList.add("clicked-date");
-      }
+      // Set the default slotTime to the selected date and time
+      const defaultSlotTime = new Date();
+      setSelectedEvent((prevEvent) => ({
+        ...prevEvent,
+        slotTime: defaultSlotTime,
+      }));
+
+      // Add a class to the clicked date's element
+      arg.dayEl.classList.add("clicked-date");
     }
   };
 
@@ -94,24 +100,16 @@ function Calendar() {
     }
 
     // Disable past dates (except current date)
-    if (cellDate < currentDate && !isSameDay(cellDate, currentDate)) {
+    if (cellDate < currentDate) {
       arg.el.classList.add("fc-past");
       arg.el.classList.add("fc-past-bg");
       arg.el.title = "Past Date";
     }
   };
 
-  function isSameDay(date1, date2) {
-    return (
-      date1.getFullYear() === date2.getFullYear() &&
-      date1.getMonth() === date2.getMonth() &&
-      date1.getDate() === date2.getDate()
-    );
-  }
-
   const handleEventClick = (arg) => {
     const clickedEvent = arg.event;
-    
+
     if (!clickedEvent) {
       console.error("Event data not found");
       return;
@@ -134,6 +132,12 @@ function Calendar() {
     });
     setIsEventModal(true);
     setIsModalOpen(true);
+    setEventDetailsMode(true); // Automatically show event details mode
+  };
+
+  //function to update eventDetailsMode
+  const updateEventDetailsMode = (mode) => {
+    setEventDetailsMode(mode);
   };
 
   const handleViewToggle = () => {
@@ -143,17 +147,28 @@ function Calendar() {
   };
 
   function getCustomTitle() {
-    const day = clickedDate.getDate().toString().padStart(2, "0");
-    const month = (clickedDate.getMonth() + 1).toString().padStart(2, "0"); // Month is 0-indexed
-    const year = clickedDate.getFullYear();
-    return `${day}-${month}-${year}`;
+    // Create a new Date object for yesterday's date
+    const today = new Date();
+    // Check if the clickedDate is earlier than today's date
+    if (clickedDate < today) {
+      const day = today.getDate().toString().padStart(2, "0");
+      const month = (today.getMonth() + 1).toString().padStart(2, "0"); // Month is 0-indexed
+      const year = today.getFullYear();
+      return `${day}-${month}-${year}`;
+    } else {
+      const day = clickedDate.getDate().toString().padStart(2, "0");
+      const month = (clickedDate.getMonth() + 1).toString().padStart(2, "0"); // Month is 0-indexed
+      const year = clickedDate.getFullYear();
+      return `${day}-${month}-${year}`;
+    }
   }
-  // console.log("selectedEvent", selectedEvent); 
+
+  // console.log("selectedEvent", selectedEvent);
   return (
     <div>
       <h2 className="heading">Appointment Booking</h2>
-      <div className="row m-5">
-        <div className="col-md-12">
+      <div className="row">
+        <div id="calendarArea" className="col-md-12 justify-content-center">
           <FullCalendar
             ref={calendarRef}
             plugins={[dayGridPlugin, interactionPlugin]}
@@ -189,7 +204,10 @@ function Calendar() {
         handleClose={handleCloseModal}
         eventData={selectedEvent}
         isBookSlotModal={!isEventModal}
-        selectedDate={clickedDate} // Pass selectedDate prop here
+        clickedDate={clickedDate} // Pass clickedDate to BookModal
+        eventDetailsMode={eventDetailsMode}
+        setEventDetailsMode={setEventDetailsMode}
+        updateEventDetailsMode={updateEventDetailsMode}
       />
     </div>
   );

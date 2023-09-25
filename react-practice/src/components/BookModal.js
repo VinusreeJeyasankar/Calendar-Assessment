@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, Toast } from "react-bootstrap";
 import BookingForm from "./BookingForm";
 
-function BookModal({ show, handleClose, eventData, isBookSlotModal }) {
+function BookModal({ show, handleClose, eventData, isBookSlotModal, eventDetailsMode, setEventDetailsMode, clickedDate}) {
   const [isToastVisible, setIsToastVisible] = useState(false);
-  const [eventDetailsMode, setEventDetailsMode] = useState(false);
-
-  useEffect(() => {
-    setEventDetailsMode(false); // Reset eventDetailsMode when the modal updates
-  }, [show]);
 
   const handleBook = (formData) => {
     // Show the toast after booking
@@ -50,13 +45,13 @@ function BookModal({ show, handleClose, eventData, isBookSlotModal }) {
             </div>
           ) : (
             // Display booking form for booking slots
-            <BookingForm onSubmit={handleBook} onClose={handleClose} />
+            <BookingForm selectedDate={clickedDate} onSubmit={handleBook} onClose={handleClose} />
           )}
         </Modal.Body>
 
         <Modal.Footer>
-          {!eventDetailsMode &&
-            !isBookSlotModal && ( // Conditionally render the button
+        {!eventDetailsMode &&
+            !isBookSlotModal && (
               <button
                 className="btn btn-primary"
                 onClick={() => setEventDetailsMode(true)}
