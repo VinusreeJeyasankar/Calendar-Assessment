@@ -133,7 +133,7 @@ label,
     flex-direction: row;
   }
   .fc-toolbar-title {
-    font-size: large !important;
+    font-size: larger !important;
     align-items: center;
   }
   .full-calendar-container {
