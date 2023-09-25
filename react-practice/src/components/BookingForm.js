@@ -182,7 +182,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
             id="selectedDate"
             name="selectedDate"
             className="form-control form-control-lg"
-            selected={formik.values.selectedDate || defaultSelectedDate || new Date()} // Use selectedDate prop here
+            selected={formik.values.selectedDate || defaultSelectedDate } // Use selectedDate prop here
             onChange={(date) => formik.setFieldValue("selectedDate", date)}
             onBlur={formik.handleBlur} // Add onBlur event handler
             showTimeSelect
