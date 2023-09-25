@@ -6,10 +6,10 @@
   pointer-events: none;
   /* Disable pointer events for past dates */
 }
-.fc-past-bg{
+.fc-past-bg {
   background-color: rgb(109, 180, 241) !important;
 }
-.fc-day.fc-day-fri.holiday-msg{
+.fc-day.fc-day-fri.holiday-msg {
   color: #000;
   padding-top: 50px;
   background-color: #f5c6cb !important;
@@ -18,8 +18,11 @@
 .fc-day {
   color: #000000 !important;
 }
-.clicked-date{
+.clicked-date {
   background-color: #f0c39a;
+}
+.fc-customTitle-button {
+  margin-right: 5px !important;
 }
 /* Book slot button */
 .bookSlot-btn {
@@ -32,7 +35,7 @@
   background-color: #000;
   padding: 20px;
 }
-.fc-customTitle-button{
+.fc-customTitle-button {
   background-color: #f5c6cb !important;
   border: none !important;
   color: #000 !important;
@@ -69,23 +72,25 @@
   padding: 12px;
 }
 .custom-modal {
-  max-width: 80%; /* Set the desired width (you can adjust the percentage as needed) */
+  max-width: 50%; /* Set the desired width (you can adjust the percentage as needed) */
   margin: 0 auto; /* Center the modal horizontally */
 }
-label, .noBookings{
+label,
+.noBookings {
   font-size: 18px;
 }
-.close{
+.close {
   margin-left: 10px;
 }
-.back{
+.back {
   margin-right: 10px;
 }
 /* Screen sizes */
 
 /* Set a maximum width for the calendar */
 .full-calendar-container {
-  max-width: 100%;
+  max-width: 100% !important; /* Adjust the percentage as needed */
+  margin: 0 auto; /* Center the container horizontally */
 }
 
 /* The calendar scales down on smaller screens */
@@ -98,13 +103,42 @@ label, .noBookings{
 .fc-toolbar {
   margin-bottom: 1em; /* Add some space below the header */
 }
-
+/* Month name on full calendar */
+.fc-toolbar-title {
+  font-size: larger !important;
+  margin-top: 5px !important;
+  margin-left: 5px !important;
+}
 /* Define styles for the buttons in the header */
 .fc-button {
   margin: 0 0.5em; /* Adjust the spacing between buttons */
 }
+#calendarArea {
+  width: 80% !important;
+  height: 80% !important;
+  margin-left: 10%;
+  margin-right: 10%;
+}
 /* Adjust styles for smaller screens */
-@media (max-width: 767px) {
+/* For smaller screens */
+@media (max-width: 768px) {
+  #calendarArea {
+    width: 80% !important;
+    height: 60% !important;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  .fc-toolbar-chunk {
+    display: flex;
+    flex-direction: row;
+  }
+  .fc-toolbar-title {
+    font-size: large !important;
+    align-items: center;
+  }
+  .full-calendar-container {
+    max-width: 100%; /* Adjust the percentage as needed */
+  }
   .fc-toolbar {
     text-align: center; /* Center align the header buttons */
   }
