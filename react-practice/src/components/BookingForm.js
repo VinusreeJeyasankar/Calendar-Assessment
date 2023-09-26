@@ -30,7 +30,6 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
     // Log the current formik values before dispatching
     console.log('After dispatch:', formik.values);
   };
-
   const maxRecruiterCount = 5;
 
   const getRecruiterCount = (recruiterName, selectedDate) => {
