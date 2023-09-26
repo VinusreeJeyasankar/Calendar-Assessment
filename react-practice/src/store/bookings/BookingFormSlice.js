@@ -13,7 +13,11 @@ export const bookingFormSlice = createSlice({
   reducers: {
     setFormField: (state, action) => {
       const { field, value } = action.payload; // username and its value 'John Patterson'
+      if (field === "selectedDate") {
+        state[field] = value.toISOString(); // Convert string back to Date object
+      } else {
       state[field] = value; // state - all initailstates, field is username, message, title, slotTime,....
+      }
     },
   },
 });
