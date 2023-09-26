@@ -140,7 +140,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur} // Add onBlur event handler
           value={formik.values.userName}
-          autoComplete="ON"
+          autoComplete="on"
         />
         {formik.touched.userName && formik.errors.userName ? (
           <div className="text-danger">{formik.errors.userName}</div>
