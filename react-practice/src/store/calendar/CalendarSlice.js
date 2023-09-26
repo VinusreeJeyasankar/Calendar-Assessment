@@ -1,39 +1,34 @@
 // calendarSlice.js
-import { createSlice } from '@reduxjs/toolkit';
+
+import { createSlice } from "@reduxjs/toolkit";
 
 const calendarSlice = createSlice({
-  name: 'calendar',
+  name: "calendar",
   initialState: {
+    events: [], // Initial state for events
     isModalOpen: false,
-    events: [],
-    selectedEvent: null,
     isEventModal: false,
-    view: 'dayGridMonth',
+    eventDetailsMode: false,
+    view: "dayGridMonth",
   },
   reducers: {
-    setModalOpen: (state, action) => {
-      state.isModalOpen = action.payload;
-    },
     setEvents: (state, action) => {
-      state.events = action.payload;
+      state.events = action.payload; // Set the events in the state
     },
-    setSelectedEvent: (state, action) => {
-      state.selectedEvent = action.payload;
+    setIsModalOpen: (state, action) => {
+      state.isModalOpen = action.payload; // Set the events in the state
     },
-    setEventModal: (state, action) => {
-      state.isEventModal = action.payload;
+    setIsEventModal: (state, action) => {
+      state.isEventModal = action.payload; // Set the events in the state
+    },
+    setEventDetailsMode: (state, action) => {
+      state.eventDetailsMode = action.payload; // Set the events in the state
     },
     setView: (state, action) => {
-      state.view = action.payload;
+      state.view = action.payload; // Set the events in the state
     },
   },
 });
 
-export const {
-  setModalOpen,
-  setEvents,
-  setSelectedEvent,
-  setEventModal,
-  setView,
-} = calendarSlice.actions;
+export const { setEvents, setIsModalOpen, setIsEventModal, setEventDetailsMode, setView } = calendarSlice.actions;
 export default calendarSlice.reducer;
