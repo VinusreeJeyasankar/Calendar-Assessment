@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const bookingFormSlice = createSlice({
-  name: "bookingForm",
+  name: "bookingForm", // slice name in store
   initialState: {
     userName: "",
     selectedRecruiter: null,
@@ -12,8 +12,8 @@ export const bookingFormSlice = createSlice({
   },
   reducers: {
     setFormField: (state, action) => {
-      const { field, value } = action.payload;
-      state[field] = value;
+      const { field, value } = action.payload; // username and its value 'John Patterson'
+      state[field] = value; // state - all initailstates, field is username, message, title, slotTime,....
     },
   },
 });
