@@ -36,9 +36,6 @@ function BookModal({ show, handleClose, eventData, isBookSlotModal, eventDetails
                   </p>
                 </div>
               ))}
-              <button className="btn btn-secondary back" onClick={() => setEventDetailsMode(false)}>
-                Back
-              </button>
               <button className="btn btn-danger" onClick={handleClose}>
                 Close
               </button>
