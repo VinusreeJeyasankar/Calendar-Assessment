@@ -1,4 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setEvents,
+  setIsModalOpen,
+  setIsEventModal,
+  setEventDetailsMode,
+  setView
+} from "../store/calendar/CalendarSlice";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../assets/css/calendar.css";
 import FullCalendar from "@fullcalendar/react";
@@ -10,13 +18,17 @@ const currentDate = new Date();
 currentDate.setDate(currentDate.getDate() - 1); // Subtract one day
 
 function Calendar() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [events, setEvents] = useState([]);
+  const dispatch = useDispatch();
+  const events = useSelector((state) => state.calendar.events);
+  const isModalOpen = useSelector((state) => state.calendar.isModalOpen);
+  const isEventModal = useSelector((state) => state.calendar.isEventModal);
+  const eventDetailsMode = useSelector(
+    (state) => state.calendar.eventDetailsMode
+  );
+  const view = useSelector((state) => state.calendar.view);
+
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [isEventModal, setIsEventModal] = useState(false);
-  const [view, setView] = useState("dayGridMonth"); // Default view is 'dayGridMonth'
   const [clickedDate, setClickedDate] = useState(currentDate); // Add state for clicked date
-  const [eventDetailsMode, setEventDetailsMode] = useState(false);
   const calendarRef = useRef(null);
 
   useEffect(() => {
@@ -25,17 +37,18 @@ function Calendar() {
       title: booking.title,
       start: booking.slotTime,
     }));
-    setEvents(formattedEvents);
-  }, []);
+    dispatch(setEvents(formattedEvents));
+    console.log("formattedEvents: ", formattedEvents);
+  }, [dispatch]);
 
   const handleBookSlotClick = () => {
-    setIsModalOpen(true);
-    setIsEventModal(false);
-    setEventDetailsMode(false); // Automatically show event details mode
+    dispatch(setIsModalOpen(true));
+    dispatch(setIsEventModal(false));
+    dispatch(setEventDetailsMode(false)); // Automatically show event details mode
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    dispatch(setIsModalOpen(false));
   };
 
   // Click event - for selected Dates
@@ -70,18 +83,21 @@ function Calendar() {
 
     if (hasNoBookings) {
       // If there are no bookings, display a message in the modal
+
       setSelectedEvent({
         title: "No booking is scheduled for today!!",
         start: clickedDate,
         bookings: [],
+        slotTime: new Date(), // Set a default slot time (you may adjust this as needed)
       });
 
-      setIsEventModal(true);
-      setIsModalOpen(true);
-      setEventDetailsMode(true); // Automatically show event details mode
+      dispatch(setIsEventModal(true));
+      dispatch(setIsModalOpen(true));
+      dispatch(setEventDetailsMode(true)); // Automatically show event details mode
 
       // Set the default slotTime to the selected date and time
       const defaultSlotTime = new Date();
+
       setSelectedEvent((prevEvent) => ({
         ...prevEvent,
         slotTime: defaultSlotTime,
@@ -134,19 +150,19 @@ function Calendar() {
       start: clickedEvent.start,
       bookings: matchingBookings,
     });
-    setIsEventModal(true);
-    setIsModalOpen(true);
-    setEventDetailsMode(true); // Automatically show event details mode
+    dispatch(setIsEventModal(true));
+    dispatch(setIsModalOpen(true));
+    dispatch(setEventDetailsMode(true)); // Automatically show event details mode
   };
 
   //function to update eventDetailsMode
   const updateEventDetailsMode = (mode) => {
-    setEventDetailsMode(mode);
+    dispatch(setEventDetailsMode(mode));
   };
 
   const handleViewToggle = () => {
     const newView = view === "dayGridMonth" ? "dayGridWeek" : "dayGridMonth";
-    setView(newView);
+    dispatch(setView(newView));
     calendarRef.current.getApi().changeView(newView);
   };
 
@@ -203,16 +219,18 @@ function Calendar() {
           />
         </div>
       </div>
-      <BookModal
-        show={isModalOpen}
-        handleClose={handleCloseModal}
-        eventData={selectedEvent}
-        isBookSlotModal={!isEventModal}
-        clickedDate={clickedDate} // Pass clickedDate to BookModal
-        eventDetailsMode={eventDetailsMode}
-        setEventDetailsMode={setEventDetailsMode}
-        updateEventDetailsMode={updateEventDetailsMode}
-      />
+      {selectedEvent && (
+        <BookModal
+          show={isModalOpen}
+          handleClose={handleCloseModal}
+          eventData={selectedEvent}
+          isBookSlotModal={!isEventModal}
+          clickedDate={clickedDate}
+          eventDetailsMode={eventDetailsMode}
+          setEventDetailsMode={setEventDetailsMode}
+          updateEventDetailsMode={updateEventDetailsMode}
+        />
+      )}
     </div>
   );
 }
