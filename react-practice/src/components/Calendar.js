@@ -7,6 +7,7 @@ import {
   setEventDetailsMode,
   setView
 } from "../store/calendar/CalendarSlice";
+import { formatDate } from "../utils/helper/dateHelper";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../assets/css/calendar.css";
 import FullCalendar from "@fullcalendar/react";
@@ -14,7 +15,8 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import BookModal from "./BookModal";
 
-const currentDate = new Date();
+
+const currentDate = formatDate(new Date());
 currentDate.setDate(currentDate.getDate() - 1); // Subtract one day
 
 function Calendar() {
@@ -35,7 +37,7 @@ function Calendar() {
     const storedBookings = JSON.parse(localStorage.getItem("bookings")) || [];
     const formattedEvents = storedBookings.map((booking) => ({
       title: booking.title,
-      start: booking.slotTime,
+      start: formatDate(booking.slotTime),
     }));
     dispatch(setEvents(formattedEvents));
     console.log("formattedEvents: ", formattedEvents);
@@ -53,7 +55,7 @@ function Calendar() {
 
   // Click event - for selected Dates
   const handleDateClick = (arg) => {
-    const clickedDate = arg.date;
+    const clickedDate = formatDate(arg.date);
     // Check if the clicked date is a Friday (day 5)
     if (clickedDate.getDay() === 5) {
       return; // Do nothing if it's a Friday
@@ -140,7 +142,7 @@ function Calendar() {
     const matchingBookings = storedBookings.filter((booking) => {
       return (
         booking.title === clickedEvent.title &&
-        new Date(booking.slotTime).getTime() === clickedEvent.start.getTime()
+        formatDate(new Date(booking.slotTime)).getTime() === clickedEvent.start.getTime()
       );
     });
 
