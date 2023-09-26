@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createSelector } from "@reduxjs/toolkit";
 
 export const bookingFormSlice = createSlice({
   name: "bookingForm", // slice name in store
   initialState: {
     userName: "",
     selectedRecruiter: null,
-    selectedDate: new Date(),
+    selectedDate: new Date().toISOString(),
     title: "",
     message: "",
     slotTime: null,
@@ -13,15 +13,14 @@ export const bookingFormSlice = createSlice({
   reducers: {
     setFormField: (state, action) => {
       const { field, value } = action.payload; // username and its value 'John Patterson'
-      if (field === "selectedDate") {
-        state[field] = value.toISOString(); // Convert string back to Date object
-      } else {
       state[field] = value; // state - all initailstates, field is username, message, title, slotTime,....
-      }
     },
   },
 });
 
 export const { setFormField } = bookingFormSlice.actions;
-export const selectFormField = (field) => (state) => state.bookingForm[field];
+export const selectFormField = (field) => createSelector(
+  state => state.bookingForm[field],
+  fieldValue => fieldValue
+);
 export default bookingFormSlice.reducer;
