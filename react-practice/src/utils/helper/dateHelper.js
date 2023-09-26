@@ -1,9 +1,13 @@
 //date helper function to make all dates in same format
 
-export function formatDate(date) {
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Month is 0-indexed
-    const year = date.getFullYear();
-    return `${year}-${month}-${day}`; // returning as 'yyyy-mm-dd' format
-}
+export const formatDate = (dateString) => {
+    const regex = /^\d{4}-\d{2}-\d{2}$/; // Regex for yyyy-mm-dd format
   
+    if (regex.test(dateString)) {
+      const [year, month, day] = dateString.split("-");
+      return `${day}-${month}-${year}`;
+    }
+  
+    return dateString; // Return as is if not in yyyy-mm-dd format
+  
+};
