@@ -1,6 +1,6 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setFormField, selectFormField } from "../store/bookings/BookingFormSlice";
+import { useDispatch } from "react-redux";
+import { setFormField } from "../store/bookings/BookingFormSlice";
 import { formatDate } from "../utils/helper/dateHelper";
 import moment from "moment";
 import { useFormik } from "formik";
@@ -21,11 +21,14 @@ const recruiterOptions = [
 function BookingForm({ onSubmit, onClose, selectedDate }) {
   const today = formatDate(new Date());
   const dispatch = useDispatch();
-  const formFields = useSelector(selectFormField);
-
+  
+  // updating field values in redux store
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    dispatch(setFormField({ field: name, value }));
+    formik.handleChange(e); // Let formik handle the change event
+    dispatch(setFormField({ field: name, value })); // Update Redux store
+    // Log the current formik values before dispatching
+    console.log('After dispatch:', formik.values);
   };
 
   const maxRecruiterCount = 5;
@@ -60,7 +63,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
     initialValues: {
       userName: "",
       selectedRecruiter: null,
-      selectedDate: selectedDate ? formatDate(new Date(selectedDate)) : formatDate(new Date()), // Convert from timestamp
+      selectedDate: formatDate(selectedDate),
       title: "", // Add title field
       message: "", // Add message field
       slotTime: null,
@@ -68,7 +71,9 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
     validationSchema: validationSchema, // Apply the validation schema
     onSubmit: (values) => {
       // Format the selected date and time using moment
-      const formattedSlotTime = formatDate(moment(values.selectedDate).valueOf());
+      const formattedSlotTime = formatDate(
+        moment(values.selectedDate).valueOf()
+      );
 
       // Store the booking with slot information
       const booking = {
@@ -134,9 +139,9 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
   const isFriday = today.getDay() === 5;
 
   const defaultSelectedDate = isFriday
-  ? moment(today).add(1, "day").valueOf() // Convert to timestamp
-  : selectedDate || today;
-  
+    ? moment(today).add(1, "day").valueOf() // Convert to timestamp
+    : selectedDate || today;
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="mb-3">
@@ -150,7 +155,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
           name="userName"
           onChange={handleInputChange}
           onBlur={formik.handleBlur} // Add onBlur event handler
-          value={formFields.userName}
+          value={formik.values.userName}
           autoComplete="ON"
         />
         {formik.touched.userName && formik.errors.userName ? (
@@ -229,7 +234,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
           name="title"
           onChange={handleInputChange}
           onBlur={formik.handleBlur} // Add onBlur event handler
-          value={formFields.title}
+          value={formik.values.title}
         />
         {formik.touched.title && formik.errors.title ? (
           <div className="text-danger">{formik.errors.title}</div>
@@ -245,7 +250,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
           name="message"
           onChange={handleInputChange}
           onBlur={formik.handleBlur} // Add onBlur event handler
-          value={formFields.message}
+          value={formik.values.message}
         />
         {formik.touched.message && formik.errors.message ? (
           <div className="text-danger">{formik.errors.message}</div>
