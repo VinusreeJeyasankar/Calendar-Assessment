@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-// import bookingFormReducer from "./bookings/BookingFormSlice";
+import bookingFormReducer from "./bookings/BookingFormSlice";
 import calendarReducer from "./calendar/CalendarSlice";
 
 const store = configureStore({
   reducer: {
-    // bookingForm: bookingFormReducer,
+    bookingForm: bookingFormReducer,
     calendar: calendarReducer,
   },
 });
