@@ -208,7 +208,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
             timeIntervals={30}
             dateFormat="MMMM d, yyyy h:mm aa"
             timeCaption="Time"
-            // minDate={new Date()} // Set minDate to the current date
+            minDate={new Date()} // Set minDate to the current date
             minTime={new Date().setHours(9, 30)} // Set minTime to 9:30 AM
             maxTime={new Date().setHours(19, 0)} // Set maxTime to 7:00 PM
             filterDate={(date) => date.getDay() !== 5} // Disable Fridays
