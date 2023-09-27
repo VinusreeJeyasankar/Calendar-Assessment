@@ -1,7 +1,6 @@
 // calendarSlice.js
 
 import { createSlice } from "@reduxjs/toolkit";
-import { formatDate } from "../../utils/helper/dateHelper";
 
 const calendarSlice = createSlice({
   name: "calendar",
@@ -15,10 +14,8 @@ const calendarSlice = createSlice({
   reducers: {
     setEvents: (state, action) => {
       // Convert dates to strings before setting in state
-      state.events = action.payload.map(event => ({
-        ...event,
-        start: formatDate(event.start), // Assuming event.start is a Date object
-      }));
+      console.log("Setting events:", action.payload);
+      state.events = action.payload;
     },
     setIsModalOpen: (state, action) => {
       state.isModalOpen = action.payload; // Set the events in the state
@@ -31,7 +28,7 @@ const calendarSlice = createSlice({
     },
     setView: (state, action) => {
       state.view = action.payload; // Set the events in the state
-    },
+    }
   },
 });
 
