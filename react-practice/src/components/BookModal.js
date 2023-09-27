@@ -9,7 +9,7 @@ function BookModal({ show, handleClose, eventData, isBookSlotModal, eventDetails
     // Show the toast after booking
     setIsToastVisible(true);
   };
-
+  
   return (
     <>
       <Modal show={show} onHide={handleClose} dialogClassName="custom-modal">
