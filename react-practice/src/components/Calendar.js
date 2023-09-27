@@ -15,6 +15,17 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import BookModal from "./BookModal";
 
+// const staticEvents = [
+//   {
+//     title: "Event 1",
+//     start: "2023-09-29T10:00:00", // Format: "YYYY-MM-DDTHH:mm:ss"
+//   },
+//   {
+//     title: "Event 2",
+//     start: "2023-09-29T14:00:00",
+//   },
+//   // Add more events as needed
+// ];
 
 const currentDate = formatDate(new Date());
 currentDate.setDate(currentDate.getDate() - 1); // Subtract one day
@@ -37,16 +48,18 @@ function Calendar() {
     const storedBookings = JSON.parse(localStorage.getItem("bookings")) || [];
     const formattedEvents = storedBookings.map((booking) => ({
       title: booking.title,
-      start: formatDate(booking.slotTime),
+      start: booking.slotTime,
     }));
+    // const formattedEvents = staticEvents;
     dispatch(setEvents(formattedEvents));
     console.log("formattedEvents: ", formattedEvents);
+
   }, [dispatch]);
 
   const handleBookSlotClick = () => {
     dispatch(setIsModalOpen(true));
-    dispatch(setIsEventModal(false));
-    dispatch(setEventDetailsMode(false)); // Automatically show event details mode
+    dispatch(setIsEventModal(false)); 
+    dispatch(setEventDetailsMode(false)); // Automatically hide event details mode
   };
 
   const handleCloseModal = () => {
@@ -93,8 +106,8 @@ function Calendar() {
         slotTime: new Date(), // Set a default slot time (you may adjust this as needed)
       });
 
-      dispatch(setIsEventModal(true));
       dispatch(setIsModalOpen(true));
+      dispatch(setIsEventModal(true));
       dispatch(setEventDetailsMode(true)); // Automatically show event details mode
 
       // Set the default slotTime to the selected date and time
@@ -152,11 +165,11 @@ function Calendar() {
       start: clickedEvent.start,
       bookings: matchingBookings,
     });
-    dispatch(setIsEventModal(true));
     dispatch(setIsModalOpen(true));
+    dispatch(setIsEventModal(true));
     dispatch(setEventDetailsMode(true)); // Automatically show event details mode
   };
-
+  
   //function to update eventDetailsMode
   const updateEventDetailsMode = (mode) => {
     dispatch(setEventDetailsMode(mode));
@@ -214,10 +227,11 @@ function Calendar() {
                 text: getCustomTitle(), // Use a function to generate the title
               },
             }}
+            events={events}
+            // key={JSON.stringify(events)}
+            eventClick={handleEventClick}
             dateClick={handleDateClick}
             dayCellDidMount={handleDayCellDidMount}
-            events={events}
-            eventClick={handleEventClick}
           />
         </div>
       </div>
