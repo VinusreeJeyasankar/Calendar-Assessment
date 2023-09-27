@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { setEvents } from "../store/calendar/CalendarSlice";
 import { setFormField } from "../store/bookings/BookingFormSlice";
 import { formatDate } from "../utils/helper/dateHelper";
 import moment from "moment";
@@ -21,14 +22,14 @@ const recruiterOptions = [
 function BookingForm({ onSubmit, onClose, selectedDate }) {
   const today = formatDate(new Date());
   const dispatch = useDispatch();
-  
+
   // updating field values in redux store
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     formik.handleChange(e); // Let formik handle the change event
     dispatch(setFormField({ field: name, value })); // Update Redux store
     // Log the current formik values before dispatching
-    console.log('After dispatch:', formik.values);
+    console.log("After dispatch:", formik.values);
   };
   const maxRecruiterCount = 5;
 
@@ -70,9 +71,8 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
     validationSchema: validationSchema, // Apply the validation schema
     onSubmit: (values) => {
       // Format the selected date and time using moment
-      const formattedSlotTime = formatDate(
-        moment(values.selectedDate).valueOf()
-      );
+      console.log("values.selectedDate:", values.selectedDate);
+      const formattedSlotTime = moment(values.selectedDate).format();
 
       // Store the booking with slot information
       const booking = {
@@ -102,12 +102,15 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
         );
         return;
       }
+
       // Append the new booking to the existing bookings
       const updatedBookings = [...existingBookings, booking];
 
       // Store the updated bookings in local storage
       localStorage.setItem("bookings", JSON.stringify(updatedBookings));
-
+      
+      dispatch(setEvents(updatedBookings)); // Dispatch setEvents action with updated bookings
+      console.log("updated:", updatedBookings);
       onSubmit(values);
       onClose();
     },
@@ -205,7 +208,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
             timeIntervals={30}
             dateFormat="MMMM d, yyyy h:mm aa"
             timeCaption="Time"
-            minDate={new Date()} // Set minDate to the current date
+            // minDate={new Date()} // Set minDate to the current date
             minTime={new Date().setHours(9, 30)} // Set minTime to 9:30 AM
             maxTime={new Date().setHours(19, 0)} // Set maxTime to 7:00 PM
             filterDate={(date) => date.getDay() !== 5} // Disable Fridays
