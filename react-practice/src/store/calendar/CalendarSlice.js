@@ -13,9 +13,8 @@ const calendarSlice = createSlice({
   },
   reducers: {
     setEvents: (state, action) => {
-      // Convert dates to strings before setting in state
       console.log("Setting events:", action.payload);
-      state.events = action.payload;
+      state.events = action.payload; // setting events on fullCalendar
     },
     setIsModalOpen: (state, action) => {
       state.isModalOpen = action.payload; // Set the events in the state
@@ -28,9 +27,15 @@ const calendarSlice = createSlice({
     },
     setView: (state, action) => {
       state.view = action.payload; // Set the events in the state
-    }
+    },
   },
 });
 
-export const { setEvents, setIsModalOpen, setIsEventModal, setEventDetailsMode, setView } = calendarSlice.actions;
+export const {
+  setEvents,
+  setIsModalOpen,
+  setIsEventModal,
+  setEventDetailsMode,
+  setView,
+} = calendarSlice.actions;
 export default calendarSlice.reducer;
