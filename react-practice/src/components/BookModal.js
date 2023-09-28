@@ -46,7 +46,7 @@ function BookModal({
             <div className="booked-details">
               <h4>{eventData.title}</h4>
               <p>Starts: {eventData.start.toDateString()}</p>
-              {filteredBookings.length > 0 && (
+              {filteredBookings.length > 2 && (
                 <>
                   <div className="mb-3">
                     <label htmlFor="search-box" className="form-label search-field">
