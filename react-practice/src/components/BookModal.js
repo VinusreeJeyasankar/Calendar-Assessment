@@ -42,7 +42,7 @@ function BookModal({ show, handleClose, eventData, isBookSlotModal, eventDetails
             </div>
           ) : (
             // Display booking form for booking slots
-            <BookingForm selectedDate={clickedDate} onSubmit={handleBook} onClose={handleClose} />
+            <BookingForm selectedDate={clickedDate} onSubmit={handleBook} onClose={handleClose}/>
           )}
         </Modal.Body>
 
