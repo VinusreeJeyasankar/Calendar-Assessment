@@ -30,6 +30,7 @@
   background-color: aqua !important;
 }
 .heading {
+  width: 100% !important;
   text-align: center;
   color: #fff;
   background-color: #000;
@@ -72,7 +73,7 @@
   padding: 12px;
 }
 .custom-modal {
-  max-width: 60%; /* Set the desired width (you can adjust the percentage as needed) */
+  max-width: 50%; /* Set the desired width (you can adjust the percentage as needed) */
   margin: 0 auto; /* Center the modal horizontally */
   font-size: 16px !important;
 }
@@ -114,6 +115,10 @@ label,
 .fc-button {
   margin: 0 0.5em; /* Adjust the spacing between buttons */
 }
+.fc-toolbar-chunk {
+  display: flex;
+  flex-direction: row;
+}
 #calendarArea {
   width: 80% !important;
   height: 80% !important;
@@ -123,6 +128,13 @@ label,
 /* Adjust styles for smaller screens */
 /* For smaller screens */
 @media (max-width: 768px) {
+  .heading {
+    width: 100% !important;
+    text-align: center;
+    color: #fff;
+    background-color: #000;
+    padding: 20px;
+  }
   #calendarArea {
     width: 80% !important;
     height: 60% !important;
@@ -149,5 +161,21 @@ label,
 
   .fc-button {
     margin: 0.2em; /* Adjust the spacing for smaller screens */
+  }
+}
+@media (min-width: 1150px) {
+  #calendarArea {
+    width: 70% !important;
+    height: auto !important;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  .fc-media-screen{
+    margin-left: 140px !important;
+  }
+  .custom-modal {
+    max-width: 40%; /* Set the desired width (you can adjust the percentage as needed) */
+    margin: 0 auto; /* Center the modal horizontally */
+    font-size: 16px !important;
   }
 }
