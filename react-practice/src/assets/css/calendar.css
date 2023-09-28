@@ -83,7 +83,11 @@ label,
 }
 .close {
   margin-left: 10px;
+  font-weight: bold;
 }
+/* .delete{
+  margin-bottom: 20px;
+} */
 .back {
   margin-right: 10px;
 }
