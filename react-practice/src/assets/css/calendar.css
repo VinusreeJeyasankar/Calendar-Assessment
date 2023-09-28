@@ -125,7 +125,7 @@ label,
   margin-left: 10%;
   margin-right: 10%;
 }
-.booked-details{
+.booked-details, .search-field{
   font-size: large;
 }
 .booking-index{
