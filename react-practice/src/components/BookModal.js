@@ -2,14 +2,22 @@ import React, { useState } from "react";
 import { Modal, Toast } from "react-bootstrap";
 import BookingForm from "./BookingForm";
 
-function BookModal({ show, handleClose, eventData, isBookSlotModal, eventDetailsMode, setEventDetailsMode, clickedDate}) {
+function BookModal({
+  show,
+  handleClose,
+  eventData,
+  isBookSlotModal,
+  eventDetailsMode,
+  setEventDetailsMode,
+  clickedDate,
+}) {
   const [isToastVisible, setIsToastVisible] = useState(false);
 
   const handleBook = (formData) => {
     // Show the toast after booking
     setIsToastVisible(true);
   };
-  
+
   return (
     <>
       <Modal show={show} onHide={handleClose} dialogClassName="custom-modal">
@@ -21,18 +29,33 @@ function BookModal({ show, handleClose, eventData, isBookSlotModal, eventDetails
         <Modal.Body>
           {eventDetailsMode ? (
             // Display event details and all booked details
-            <div>
+            <div className="booked-details">
               <h4>{eventData.title}</h4>
               <p>Starts: {eventData.start.toDateString()}</p>
               {eventData.bookings.map((booking, index) => (
                 <div key={index}>
-                  <h5>Booking {index + 1}</h5>
-                  <p>User's Name: {booking.userName}</p>
-                  <p>Recruiter: {booking.recruiter}</p>
-                  <p>Title: {booking.title}</p>
-                  <p>Message: {booking.message}</p>
-                  <p>
-                    Time Slot: {new Date(booking.slotTime).toLocaleString()}
+                  <h5 className="booking-index">Booking {index + 1}</h5>
+                  <p className="booking-info">
+                    <span className="label1">User's Name:</span>
+                    <span className="value">{booking.userName}</span>
+                  </p>
+                  <p className="booking-info">
+                    <span className="label1">Recruiter:</span>
+                    <span className="value1">{booking.recruiter}</span>
+                  </p>
+                  <p className="booking-info">
+                    <span className="label1">Title:</span>
+                    <span className="value">{booking.title}</span>
+                  </p>
+                  <p className="booking-info">
+                    <span className="label1">Message:</span>
+                    <span className="value">{booking.message}</span>
+                  </p>
+                  <p className="booking-info">
+                    <span className="label1">Time Slot:</span>
+                    <span className="value">
+                      {new Date(booking.slotTime).toLocaleString()}
+                    </span>
                   </p>
                 </div>
               ))}
@@ -43,20 +66,25 @@ function BookModal({ show, handleClose, eventData, isBookSlotModal, eventDetails
           ) : (
             // Display booking form for booking slots
             // Conditionally render BookingForm based on isBookSlotModal
-            isBookSlotModal && <BookingForm selectedDate={clickedDate} onSubmit={handleBook} onClose={handleClose}/>
+            isBookSlotModal && (
+              <BookingForm
+                selectedDate={clickedDate}
+                onSubmit={handleBook}
+                onClose={handleClose}
+              />
+            )
           )}
         </Modal.Body>
 
         <Modal.Footer>
-        {!eventDetailsMode &&
-            !isBookSlotModal && (
-              <button
-                className="btn btn-primary"
-                onClick={() => setEventDetailsMode(true)}
-              >
-                Show Event Details
-              </button>
-            )}
+          {!eventDetailsMode && !isBookSlotModal && (
+            <button
+              className="btn btn-primary"
+              onClick={() => setEventDetailsMode(true)}
+            >
+              Show Event Details
+            </button>
+          )}
         </Modal.Footer>
       </Modal>
 
