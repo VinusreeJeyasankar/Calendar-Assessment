@@ -210,6 +210,31 @@ function Calendar() {
   const updateEventDetailsMode = (mode) => {
     dispatch(setEventDetailsMode(mode));
   };
+  
+  const handleDeleteEvent = () => {
+    if (!selectedEvent || !selectedEvent.title) {
+      console.error('No event selected or event has no title');
+      return;
+    }
+  
+    const updatedEvents = events.filter(event => (
+      event.title !== selectedEvent.title ||
+      new Date(event.start).toString() !== new Date(selectedEvent.start).toString()
+    ));
+  
+    dispatch(setEvents(updatedEvents));  // Dispatch action to update events
+  
+    const storedBookings = JSON.parse(localStorage.getItem('bookings')) || [];
+    const updatedBookings = storedBookings.filter(booking => (
+      booking.title !== selectedEvent.title ||
+      new Date(booking.slotTime).toString() !== new Date(selectedEvent.start).toString()
+    ));
+        
+    localStorage.setItem('bookings', JSON.stringify(updatedBookings));
+  
+    setIsEventModal(false);
+    setIsModalOpen(false);
+  };
 
   const handleViewToggle = () => {
     const newView = view === "dayGridMonth" ? "dayGridWeek" : "dayGridMonth";
@@ -281,6 +306,7 @@ function Calendar() {
           eventDetailsMode={eventDetailsMode}
           setEventDetailsMode={setEventDetailsMode}
           updateEventDetailsMode={updateEventDetailsMode}
+          onDelete={handleDeleteEvent}
         />
       )}
     </div>
