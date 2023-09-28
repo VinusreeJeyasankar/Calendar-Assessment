@@ -42,7 +42,8 @@ function BookModal({ show, handleClose, eventData, isBookSlotModal, eventDetails
             </div>
           ) : (
             // Display booking form for booking slots
-            <BookingForm selectedDate={clickedDate} onSubmit={handleBook} onClose={handleClose}/>
+            // Conditionally render BookingForm based on isBookSlotModal
+            isBookSlotModal && <BookingForm selectedDate={clickedDate} onSubmit={handleBook} onClose={handleClose}/>
           )}
         </Modal.Body>
 
