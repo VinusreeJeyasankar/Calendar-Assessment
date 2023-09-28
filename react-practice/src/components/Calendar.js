@@ -68,57 +68,92 @@ function Calendar() {
 
   // Click event - for selected Dates
   const handleDateClick = (arg) => {
-    const clickedDate = formatDate(arg.date);
-    // Check if the clicked date is a Friday (day 5)
+    const clickedDate = new Date(arg.date);
+  
     if (clickedDate.getDay() === 5) {
       return; // Do nothing if it's a Friday
     }
+  
     const today = new Date();
     today.setDate(today.getDate() - 1); // Subtract one day
-
-    // Check if the clicked date is in the past
+  
     if (clickedDate < today) {
-      // If it's in the past, prevent further actions
-      return;
+      return; // If it's in the past, prevent further actions
     }
-
-    setClickedDate(clickedDate); // Update clicked date
-
-    // Remove background from previously selected date
+    setClickedDate(clickedDate);
     const prevSelectedDateEl = document.querySelector(".clicked-date");
     if (prevSelectedDateEl) {
       prevSelectedDateEl.classList.remove("clicked-date");
     }
-
-    // Check if there are no bookings scheduled for the clicked date
-    const hasNoBookings = events.every(
-      (event) =>
-        new Date(event.start).toISOString() !== clickedDate.toISOString()
-    );
-
-    if (hasNoBookings) {
-      // If there are no bookings, display a message in the modal
-
+  
+    const matchingBookings = [];
+  
+    events.forEach((event) => {
+      const eventDate = new Date(event.start);
+      if (
+        eventDate.getFullYear() === clickedDate.getFullYear() &&
+        eventDate.getMonth() === clickedDate.getMonth() &&
+        eventDate.getDate() === clickedDate.getDate()
+      ) {
+        const storedBookings = JSON.parse(localStorage.getItem("bookings")) || [];
+        const matchingBooking = storedBookings.find((booking) => {
+          return (
+            booking.title === event.title &&
+            booking.slotTime === event.start
+          );
+        });
+    
+        if (matchingBooking) {
+          matchingBookings.push({
+            title: matchingBooking.title,
+            slotTime: matchingBooking.slotTime,
+            userName: matchingBooking.userName,
+            recruiter: matchingBooking.recruiter,
+            message: matchingBooking.message,
+          });
+        }
+      }
+    });    
+  
+    if (matchingBookings.length > 0) {
       setSelectedEvent({
-        title: "No booking is scheduled for today!!",
+        title: `Booked Slots`,
         start: clickedDate,
-        bookings: [],
-        slotTime: new Date(), // Set a default slot time (you may adjust this as needed)
+        bookings: matchingBookings,
+        slotTime: new Date(),
       });
-
+  
       dispatch(setIsModalOpen(true));
       dispatch(setIsEventModal(true));
-      dispatch(setEventDetailsMode(true)); // Automatically show event details mode
-
-      // Set the default slotTime to the selected date and time
+      dispatch(setEventDetailsMode(true));
+  
       const defaultSlotTime = new Date();
-
+  
       setSelectedEvent((prevEvent) => ({
         ...prevEvent,
         slotTime: defaultSlotTime,
       }));
-
-      // Add a class to the clicked date's element
+  
+      arg.dayEl.classList.add("clicked-date");
+    } else {
+      setSelectedEvent({
+        title: "No booking is scheduled for today!!",
+        start: clickedDate,
+        bookings: [],
+        slotTime: new Date(),
+      });
+  
+      dispatch(setIsModalOpen(true));
+      dispatch(setIsEventModal(true));
+      dispatch(setEventDetailsMode(true));
+  
+      const defaultSlotTime = new Date();
+  
+      setSelectedEvent((prevEvent) => ({
+        ...prevEvent,
+        slotTime: defaultSlotTime,
+      }));
+  
       arg.dayEl.classList.add("clicked-date");
     }
   };
