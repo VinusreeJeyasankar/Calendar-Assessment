@@ -44,16 +44,17 @@ function BookModal({
         <Modal.Body>
           {eventDetailsMode ? (
             <div className="booked-details">
+              <h4>{eventData.title}</h4>
+              <p>Starts: {eventData.start.toDateString()}</p>
               {filteredBookings.length > 0 && (
                 <>
                   <div className="mb-3">
-                    <label htmlFor="search-box" className="form-label">
-                      {" "}
-                      Search Field:{" "}
+                    <label htmlFor="search-box" className="form-label search-field">
+                      Search Field:
                     </label>
                     <input
                       id="search-box"
-                      className="form-control"
+                      className="form-control search-field"
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
@@ -63,8 +64,6 @@ function BookModal({
                   </div>
                 </>
               )}
-              <h4>{eventData.title}</h4>
-              <p>Starts: {eventData.start.toDateString()}</p>
               {filteredBookings.map((booking, index) => (
                 // Render booking details here
                 <div key={index}>
