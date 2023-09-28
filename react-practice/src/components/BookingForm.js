@@ -108,9 +108,16 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
 
       // Store the updated bookings in local storage
       localStorage.setItem("bookings", JSON.stringify(updatedBookings));
-      
-      dispatch(setEvents(updatedBookings)); // Dispatch setEvents action with updated bookings
-      console.log("updated:", updatedBookings);
+
+      // Create a new array with only title and slotTime
+      const titlesAndSlotTimes = updatedBookings.map((booking) => ({
+        title: booking.title,
+        start: booking.slotTime,
+      }));
+
+      dispatch(setEvents(titlesAndSlotTimes));
+      // dispatch(setEvents(updatedBookings)); // Dispatch setEvents action with updated bookings
+      console.log("LocalStorage updation:", updatedBookings);
       onSubmit(values);
       onClose();
     },
