@@ -125,6 +125,20 @@ label,
   margin-left: 10%;
   margin-right: 10%;
 }
+.booked-details{
+  font-size: large;
+}
+.booking-index{
+  background-color: #f8be7b;
+  padding: 15px;
+}
+.label1{
+  font-weight: bold;
+  padding-right: 10px;
+}
+.value1{
+  color: rgb(0, 0, 212);
+}
 /* Adjust styles for smaller screens */
 /* For smaller screens */
 @media (max-width: 768px) {
