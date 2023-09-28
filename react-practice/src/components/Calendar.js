@@ -87,7 +87,7 @@ function Calendar() {
     }
   
     const matchingBookings = [];
-  
+    //getting booked event from storage to display on events modal
     events.forEach((event) => {
       const eventDate = new Date(event.start);
       if (
@@ -116,8 +116,9 @@ function Calendar() {
     });    
   
     if (matchingBookings.length > 0) {
+      const formattedDate = getCustomTitle(clickedDate);
       setSelectedEvent({
-        title: `Booked Slots`,
+        title: `Booked Slots for ${formattedDate}`,
         start: clickedDate,
         bookings: matchingBookings,
         slotTime: new Date(),
