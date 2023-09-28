@@ -11,12 +11,27 @@ function BookModal({
   setEventDetailsMode,
   clickedDate,
 }) {
+  const [searchQuery, setSearchQuery] = useState("");
   const [isToastVisible, setIsToastVisible] = useState(false);
 
   const handleBook = (formData) => {
     // Show the toast after booking
     setIsToastVisible(true);
   };
+
+  const filteredBookings = eventData.bookings.filter((booking) => {
+    const searchValue = searchQuery.toLowerCase();
+    return (
+      booking.userName.toLowerCase().includes(searchValue) ||
+      booking.recruiter.toLowerCase().includes(searchValue) ||
+      booking.title.toLowerCase().includes(searchValue) ||
+      booking.message.toLowerCase().includes(searchValue) ||
+      new Date(booking.slotTime)
+        .toLocaleString()
+        .toLowerCase()
+        .includes(searchValue)
+    );
+  });
 
   return (
     <>
@@ -28,11 +43,30 @@ function BookModal({
         </Modal.Header>
         <Modal.Body>
           {eventDetailsMode ? (
-            // Display event details and all booked details
             <div className="booked-details">
+              {filteredBookings.length > 0 && (
+                <>
+                  <div className="mb-3">
+                    <label htmlFor="search-box" className="form-label">
+                      {" "}
+                      Search Field:{" "}
+                    </label>
+                    <input
+                      id="search-box"
+                      className="form-control"
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search..."
+                      autoComplete="on"
+                    />
+                  </div>
+                </>
+              )}
               <h4>{eventData.title}</h4>
               <p>Starts: {eventData.start.toDateString()}</p>
-              {eventData.bookings.map((booking, index) => (
+              {filteredBookings.map((booking, index) => (
+                // Render booking details here
                 <div key={index}>
                   <h5 className="booking-index">Booking {index + 1}</h5>
                   <p className="booking-info">
@@ -64,8 +98,6 @@ function BookModal({
               </button>
             </div>
           ) : (
-            // Display booking form for booking slots
-            // Conditionally render BookingForm based on isBookSlotModal
             isBookSlotModal && (
               <BookingForm
                 selectedDate={clickedDate}
