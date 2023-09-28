@@ -10,6 +10,7 @@ function BookModal({
   eventDetailsMode,
   setEventDetailsMode,
   clickedDate,
+  onDelete,
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isToastVisible, setIsToastVisible] = useState(false);
@@ -48,8 +49,12 @@ function BookModal({
               <p>Starts: {eventData.start.toDateString()}</p>
               {filteredBookings.length > 2 && (
                 <>
+                  {/* search field */}
                   <div className="mb-3">
-                    <label htmlFor="search-box" className="form-label search-field">
+                    <label
+                      htmlFor="search-box"
+                      className="form-label search-field"
+                    >
                       Search Field:
                     </label>
                     <input
@@ -65,7 +70,7 @@ function BookModal({
                 </>
               )}
               {filteredBookings.map((booking, index) => (
-                // Render booking details here
+                // Rendering booking details
                 <div key={index}>
                   <h5 className="booking-index">Booking {index + 1}</h5>
                   <p className="booking-info">
@@ -92,7 +97,19 @@ function BookModal({
                   </p>
                 </div>
               ))}
-              <button className="btn btn-danger" onClick={handleClose}>
+              <hr />
+              {eventData && eventData.bookings.length === 1 && (
+                <button
+                  className="btn btn-danger delete mb-4"
+                  onClick={onDelete}
+                >
+                  Delete
+                </button>
+              )}
+              <button
+                className="btn bg-black text-white float-end close"
+                onClick={handleClose}
+              >
                 Close
               </button>
             </div>
@@ -119,6 +136,7 @@ function BookModal({
         </Modal.Footer>
       </Modal>
 
+      {/* Toaster added */}
       <Toast
         show={isToastVisible}
         onClose={() => setIsToastVisible(false)}
