@@ -15,18 +15,6 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import BookModal from "./BookModal";
 
-// const staticEvents = [
-//   {
-//     title: "Event 1",
-//     start: "2023-09-29T10:00:00", // Format: "YYYY-MM-DDTHH:mm:ss"
-//   },
-//   {
-//     title: "Event 2",
-//     start: "2023-09-29T14:00:00",
-//   },
-//   // Add more events as needed
-// ];
-
 const currentDate = formatDate(new Date());
 currentDate.setDate(currentDate.getDate() - 1); // Subtract one day
 
