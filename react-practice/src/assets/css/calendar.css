@@ -79,7 +79,7 @@
 }
 label,
 .noBookings {
-  font-size: 16px;
+  font-size: 16px !important;
 }
 .close {
   margin-left: 10px;
