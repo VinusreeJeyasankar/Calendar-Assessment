@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Toast } from "react-bootstrap";
+import { Modal, Toast, Carousel } from "react-bootstrap";
 import BookingForm from "./BookingForm";
 
 function BookModal({
@@ -69,34 +69,71 @@ function BookModal({
                   </div>
                 </>
               )}
-              {filteredBookings.map((booking, index) => (
-                // Rendering booking details
-                <div key={index}>
-                  <h5 className="booking-index">Booking {index + 1}</h5>
-                  <p className="booking-info">
-                    <span className="label1">User's Name:</span>
-                    <span className="value">{booking.userName}</span>
-                  </p>
-                  <p className="booking-info">
-                    <span className="label1">Recruiter:</span>
-                    <span className="value1">{booking.recruiter}</span>
-                  </p>
-                  <p className="booking-info">
-                    <span className="label1">Title:</span>
-                    <span className="value">{booking.title}</span>
-                  </p>
-                  <p className="booking-info">
-                    <span className="label1">Message:</span>
-                    <span className="value">{booking.message}</span>
-                  </p>
-                  <p className="booking-info">
-                    <span className="label1">Time Slot:</span>
-                    <span className="value">
-                      {new Date(booking.slotTime).toLocaleString()}
-                    </span>
-                  </p>
-                </div>
-              ))}
+              {/* Carousel for displaying multiple events */}
+              {filteredBookings.length > 1 ? (
+                <Carousel>
+                  {filteredBookings.map((booking, index) => (
+                    <Carousel.Item key={index}>
+                      <div>
+                        <h5 className="booking-index">Booking {index + 1}</h5>
+                        {/* ... (booking details code) */}
+                        <p className="booking-info">
+                          <span className="label1">User's Name:</span>
+                          <span className="value">{booking.userName}</span>
+                        </p>
+                        <p className="booking-info">
+                          <span className="label1">Recruiter:</span>
+                          <span className="value1">{booking.recruiter}</span>
+                        </p>
+                        <p className="booking-info">
+                          <span className="label1">Title:</span>
+                          <span className="value">{booking.title}</span>
+                        </p>
+                        <p className="booking-info">
+                          <span className="label1">Message:</span>
+                          <span className="value">{booking.message}</span>
+                        </p>
+                        <p className="booking-info">
+                          <span className="label1">Time Slot:</span>
+                          <span className="value">
+                            {new Date(booking.slotTime).toLocaleString()}
+                          </span>
+                        </p>
+                      </div>
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+              ) : (
+                filteredBookings.map((booking, index) => (
+                  // Rendering booking details
+                  <div key={index}>
+                    <h5 className="booking-index">Booking {index + 1}</h5>
+                    {/* ... (booking details code) */}
+                    <p className="booking-info">
+                      <span className="label1">User's Name:</span>
+                      <span className="value">{booking.userName}</span>
+                    </p>
+                    <p className="booking-info">
+                      <span className="label1">Recruiter:</span>
+                      <span className="value1">{booking.recruiter}</span>
+                    </p>
+                    <p className="booking-info">
+                      <span className="label1">Title:</span>
+                      <span className="value">{booking.title}</span>
+                    </p>
+                    <p className="booking-info">
+                      <span className="label1">Message:</span>
+                      <span className="value">{booking.message}</span>
+                    </p>
+                    <p className="booking-info">
+                      <span className="label1">Time Slot:</span>
+                      <span className="value">
+                        {new Date(booking.slotTime).toLocaleString()}
+                      </span>
+                    </p>
+                  </div>
+                ))
+              )}
               <hr />
               {eventData && eventData.bookings.length === 1 && (
                 <button
