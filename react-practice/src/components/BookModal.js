@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Toast, Carousel } from "react-bootstrap";
 import BookingForm from "./BookingForm";
+import BookingDetail from "./BookingDetails";
 
 function BookModal({
   show,
@@ -74,64 +75,13 @@ function BookModal({
                 <Carousel>
                   {filteredBookings.map((booking, index) => (
                     <Carousel.Item key={index}>
-                      <div>
-                        <h5 className="booking-index">Booking {index + 1}</h5>
-                        {/* ... (booking details code) */}
-                        <p className="booking-info">
-                          <span className="label1">User's Name:</span>
-                          <span className="value">{booking.userName}</span>
-                        </p>
-                        <p className="booking-info">
-                          <span className="label1">Recruiter:</span>
-                          <span className="value1">{booking.recruiter}</span>
-                        </p>
-                        <p className="booking-info">
-                          <span className="label1">Title:</span>
-                          <span className="value">{booking.title}</span>
-                        </p>
-                        <p className="booking-info">
-                          <span className="label1">Message:</span>
-                          <span className="value">{booking.message}</span>
-                        </p>
-                        <p className="booking-info">
-                          <span className="label1">Time Slot:</span>
-                          <span className="value">
-                            {new Date(booking.slotTime).toLocaleString()}
-                          </span>
-                        </p>
-                      </div>
+                      <BookingDetail booking={booking} index={index} />
                     </Carousel.Item>
                   ))}
                 </Carousel>
               ) : (
                 filteredBookings.map((booking, index) => (
-                  // Rendering booking details
-                  <div key={index}>
-                    <h5 className="booking-index">Booking {index + 1}</h5>
-                    {/* ... (booking details code) */}
-                    <p className="booking-info">
-                      <span className="label1">User's Name:</span>
-                      <span className="value">{booking.userName}</span>
-                    </p>
-                    <p className="booking-info">
-                      <span className="label1">Recruiter:</span>
-                      <span className="value1">{booking.recruiter}</span>
-                    </p>
-                    <p className="booking-info">
-                      <span className="label1">Title:</span>
-                      <span className="value">{booking.title}</span>
-                    </p>
-                    <p className="booking-info">
-                      <span className="label1">Message:</span>
-                      <span className="value">{booking.message}</span>
-                    </p>
-                    <p className="booking-info">
-                      <span className="label1">Time Slot:</span>
-                      <span className="value">
-                        {new Date(booking.slotTime).toLocaleString()}
-                      </span>
-                    </p>
-                  </div>
+                  <BookingDetail key={index} booking={booking} index={index} />
                 ))
               )}
               <hr />
