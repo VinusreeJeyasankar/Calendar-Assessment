@@ -205,24 +205,27 @@ function Calendar() {
       return;
     }
   
+    // Remove event from Redux state
     const updatedEvents = events.filter(event => (
       event.title !== selectedEvent.title ||
       new Date(event.start).toString() !== new Date(selectedEvent.start).toString()
     ));
+    dispatch(setEvents(updatedEvents));
   
-    dispatch(setEvents(updatedEvents));  // Dispatch action to update events
-  
+    // Remove event from local storage
     const storedBookings = JSON.parse(localStorage.getItem('bookings')) || [];
     const updatedBookings = storedBookings.filter(booking => (
       booking.title !== selectedEvent.title ||
       new Date(booking.slotTime).toString() !== new Date(selectedEvent.start).toString()
     ));
-        
     localStorage.setItem('bookings', JSON.stringify(updatedBookings));
   
+    // Close the modal and reset event details mode
+    setEventDetailsMode(false);
     setIsEventModal(false);
     setIsModalOpen(false);
   };
+  
 
   const handleViewToggle = () => {
     const newView = view === "dayGridMonth" ? "dayGridWeek" : "dayGridMonth";

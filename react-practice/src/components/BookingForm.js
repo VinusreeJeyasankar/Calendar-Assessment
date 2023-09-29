@@ -63,7 +63,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
     initialValues: {
       userName: "",
       selectedRecruiter: null,
-      selectedDate: formatDate(selectedDate),
+      selectedDate: formatDate(selectedDate) || new Date(),
       title: "", // Add title field
       message: "", // Add message field
       slotTime: null,
@@ -77,7 +77,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
       // Store the booking with slot information
       const booking = {
         ...values,
-        selectedDate: values.selectedDate.toISOString(), // Format selectedDate
+        selectedDate: formatDate(values.selectedDate.toISOString()), // Format selectedDate
         slotTime: formattedSlotTime, // Store formatted date and time
         recruiter: values.selectedRecruiter.value, // Store recruiter value
       };
@@ -135,7 +135,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
     return (
       <>
         <div className="noBookings mb-3">
-          No Recruiters or bookings available for this day,{" "}
+          No Recruiters or bookings available for this day,
           {moment(formik.values.selectedDate).format("MMMM D, YYYY")}.
         </div>
         <button className="btn btn-danger" onClick={onClose}>
@@ -150,7 +150,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
   const defaultSelectedDate = isFriday
     ? moment(today).add(1, "day").valueOf() // Convert to timestamp
     : selectedDate || today;
-
+  console.log(defaultSelectedDate)
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="mb-3">
@@ -207,7 +207,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
             id="selectedDate"
             name="selectedDate"
             className="form-control form-control-lg"
-            selected={formik.values.selectedDate || defaultSelectedDate} // Use selectedDate prop here
+            selected={formik.values.selectedDate && defaultSelectedDate } // Use selectedDate prop here
             onChange={(date) => formik.setFieldValue("selectedDate", date)}
             onBlur={formik.handleBlur} // Add onBlur event handler
             showTimeSelect
@@ -261,6 +261,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
           onChange={handleInputChange}
           onBlur={formik.handleBlur} // Add onBlur event handler
           value={formik.values.message}
+          autoComplete="on"
         />
         {formik.touched.message && formik.errors.message ? (
           <div className="text-danger">{formik.errors.message}</div>

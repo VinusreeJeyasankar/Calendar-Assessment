@@ -2,6 +2,10 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 
+const updateState = (key) => (state, action) => {
+  state[key] = action.payload;
+};
+
 const calendarSlice = createSlice({
   name: "calendar",
   initialState: {
@@ -12,22 +16,11 @@ const calendarSlice = createSlice({
     view: "dayGridMonth",
   },
   reducers: {
-    setEvents: (state, action) => {
-      console.log("Setting events:", action.payload);
-      state.events = action.payload; // setting events on fullCalendar
-    },
-    setIsModalOpen: (state, action) => {
-      state.isModalOpen = action.payload; // Set the events in the state
-    },
-    setIsEventModal: (state, action) => {
-      state.isEventModal = action.payload; // Set the events in the state
-    },
-    setEventDetailsMode: (state, action) => {
-      state.eventDetailsMode = action.payload; // Set the events in the state
-    },
-    setView: (state, action) => {
-      state.view = action.payload; // Set the events in the state
-    },
+    setEvents: updateState('events'),
+    setIsModalOpen: updateState('isModalOpen'),
+    setIsEventModal: updateState('isEventModal'),
+    setEventDetailsMode: updateState('eventDetailsMode'),
+    setView: updateState('view'),
   },
 });
 
@@ -38,4 +31,4 @@ export const {
   setEventDetailsMode,
   setView,
 } = calendarSlice.actions;
-export default calendarSlice.reducer;
+export const calendarReducer = calendarSlice.reducer;
