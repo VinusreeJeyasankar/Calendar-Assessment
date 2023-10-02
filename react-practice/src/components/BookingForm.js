@@ -66,7 +66,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
       selectedDate: formatDate(selectedDate) || new Date(),
       title: "", // Add title field
       message: "", // Add message field
-      slotTime: null,
+      slotTime: new Date().setHours(9, 30),
     },
     validationSchema: validationSchema, // Apply the validation schema
     onSubmit: (values) => {
@@ -81,7 +81,6 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
         slotTime: formattedSlotTime, // Store formatted date and time
         recruiter: values.selectedRecruiter.value, // Store recruiter value
       };
-
       // Retrieve existing bookings from local storage or initialize an empty array
       const existingBookings =
         JSON.parse(localStorage.getItem("bookings")) || [];
@@ -122,7 +121,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
       onClose();
     },
   });
-
+  console.log("selectedDate : ", selectedDate)
   // Check if all recruiters have reached their limit for the selected day
   const isAllRecruitersFull = recruiterOptions.every((recruiter) => {
     const selectedDate = formik.values.selectedDate;
@@ -150,7 +149,8 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
   const defaultSelectedDate = isFriday
     ? moment(today).add(1, "day").valueOf() // Convert to timestamp
     : selectedDate || today;
-  console.log(defaultSelectedDate)
+  console.log("defaultSelected Date: ", defaultSelectedDate);
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="mb-3">
@@ -207,10 +207,10 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
             id="selectedDate"
             name="selectedDate"
             className="form-control form-control-lg"
-            selected={formik.values.selectedDate && defaultSelectedDate } // Use selectedDate prop here
+            selected={formik.values.selectedDate} // Use selectedDate prop here
             onChange={(date) => formik.setFieldValue("selectedDate", date)}
             onBlur={formik.handleBlur} // Add onBlur event handler
-            showTimeSelect
+            showTimeSelect={true}
             timeFormat="HH:mm"
             timeIntervals={30}
             dateFormat="MMMM d, yyyy h:mm aa"
