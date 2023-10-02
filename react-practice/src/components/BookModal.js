@@ -15,6 +15,18 @@ function BookModal({
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isToastVisible, setIsToastVisible] = useState(false);
+  const [carouselIndex, setCarouselIndex] = useState(0); // Add carouselIndex state
+
+  const handleSelect = (selectedIndex, e) => {
+    setCarouselIndex(selectedIndex); // Update carouselIndex when the user clicks on a slide
+  };
+  const handlePrev = () => {
+    setCarouselIndex((prevIndex) => (prevIndex === 0 ? eventData.bookings.length - 1 : prevIndex - 1));
+  };
+
+  const handleNext = () => {
+    setCarouselIndex((prevIndex) => (prevIndex === eventData.bookings.length - 1 ? 0 : prevIndex + 1));
+  };
 
   const handleBook = (formData) => {
     // Show the toast after booking
@@ -72,7 +84,12 @@ function BookModal({
               )}
               {/* Carousel for displaying multiple events */}
               {filteredBookings.length > 1 ? (
-                <Carousel>
+                <Carousel
+                  activeIndex={carouselIndex}
+                  onSelect={handleSelect}
+                  controls={false} // Show controls if there's more than one slide
+                  interval={null} // Disable automatic sliding
+                >
                   {filteredBookings.map((booking, index) => (
                     <Carousel.Item key={index}>
                       <BookingDetail booking={booking} index={index} />
@@ -84,17 +101,27 @@ function BookModal({
                   <BookingDetail key={index} booking={booking} index={index} />
                 ))
               )}
+              {filteredBookings.length > 1 && (
+                <div className="carousel-buttons">
+                  <button className="btn btn-outline-dark" onClick={handlePrev}>
+                    Previous 
+                  </button>
+                  <button className="btn btn-outline-dark float-end" onClick={handleNext}>
+                    Next
+                  </button>
+                </div>
+              )}
               <hr />
               {eventData && eventData.bookings.length === 1 && (
                 <button
-                  className="btn btn-danger delete mb-4"
+                  className="btn btn-outline-danger delete mb-4"
                   onClick={onDelete}
                 >
-                  Delete
+                  <i className="fas fa-trash"></i> Delete
                 </button>
               )}
               <button
-                className="btn bg-black text-white float-end close"
+                className="btn btn-danger text-white float-end close"
                 onClick={handleClose}
               >
                 Close
