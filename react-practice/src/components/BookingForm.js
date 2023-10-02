@@ -20,8 +20,9 @@ const recruiterOptions = [
 ];
 
 function BookingForm({ onSubmit, onClose, selectedDate }) {
-  const today = formatDate(new Date());
   const dispatch = useDispatch();
+  const today = formatDate(new Date());
+  console.log("Today - ", today)
 
   // updating field values in redux store
   const handleInputChange = (e) => {
@@ -63,10 +64,10 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
     initialValues: {
       userName: "",
       selectedRecruiter: null,
-      selectedDate: formatDate(selectedDate) || new Date(),
+      selectedDate: formatDate(selectedDate),
       title: "", // Add title field
       message: "", // Add message field
-      slotTime: new Date().setHours(9, 30),
+      slotTime: null,
     },
     validationSchema: validationSchema, // Apply the validation schema
     onSubmit: (values) => {
