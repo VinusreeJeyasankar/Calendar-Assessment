@@ -8,7 +8,7 @@ export const bookingFormSlice = createSlice({
     selectedDate: new Date().toISOString(),
     title: "",
     message: "",
-    slotTime: null,
+    slotTime: new Date().setHours(9, 30),
   },
   reducers: {
     setFormField: (state, action) => {
