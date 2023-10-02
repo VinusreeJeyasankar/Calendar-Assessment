@@ -38,7 +38,6 @@ function Calendar() {
       title: booking.title,
       start: booking.slotTime,
     }));
-    // const formattedEvents = staticEvents;
     dispatch(setEvents(formattedEvents));
     console.log("formattedEvents: ", formattedEvents);
 
