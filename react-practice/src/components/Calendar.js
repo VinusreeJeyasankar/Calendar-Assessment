@@ -223,6 +223,9 @@ function Calendar() {
     setEventDetailsMode(false);
     setIsEventModal(false);
     setIsModalOpen(false);
+
+    //close the modal after event deleted
+    handleCloseModal();
   };
   
 
