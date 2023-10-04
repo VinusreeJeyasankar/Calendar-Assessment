@@ -137,17 +137,6 @@ function BookModal({
             )
           )}
         </Modal.Body>
-
-        <Modal.Footer>
-          {!eventDetailsMode && !isBookSlotModal && (
-            <button
-              className="btn btn-primary"
-              onClick={() => setEventDetailsMode(true)}
-            >
-              Show Event Details
-            </button>
-          )}
-        </Modal.Footer>
       </Modal>
 
       {/* Toaster added */}
