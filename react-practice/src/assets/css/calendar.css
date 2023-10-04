@@ -143,6 +143,10 @@ label,
 .value1{
   color: rgb(0, 0, 212);
 }
+.fc-daygrid-day-frame{
+  height: 50px !important;
+  overflow-y: scroll !important;
+}
 /* Adjust styles for smaller screens */
 /* For smaller screens */
 @media (max-width: 768px) {
