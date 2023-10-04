@@ -4,6 +4,8 @@ import { setEvents } from "../store/calendar/CalendarSlice";
 import { setFormField } from "../store/bookings/BookingFormSlice";
 import { formatDate } from "../utils/helper/dateHelper";
 import moment from "moment";
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
 import { useFormik } from "formik";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
@@ -67,7 +69,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
     initialValues: {
       userName: "",
       selectedRecruiter: null,
-      selectedDate: formatDate(selectedDate),
+      selectedDate: setHours(setMinutes(new Date(selectedDate), 30), 9),
       title: "", // Add title field
       message: "", // Add message field
       slotTime: moment().format("HH:mm"), // Set slotTime to current time
@@ -148,12 +150,12 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
     );
   }
   //move to next day if the current day is friday
-  const isFriday = today.getDay() === 5;
+  // const isFriday = today.getDay() === 5;
 
-  const defaultSelectedDate = isFriday
-    ? moment(today).add(1, "day").valueOf() // Convert to timestamp
-    : selectedDate || today;
-  console.log("defaultSelected Date: ", defaultSelectedDate);
+  // const defaultSelectedDate = isFriday
+  //   ? moment(today).add(1, "day").valueOf() // Convert to timestamp
+  //   : selectedDate || today;
+  // console.log("defaultSelected Date: ", defaultSelectedDate);
 
   console.log("slotTime: ", formik.values.slotTime)
   return (
@@ -212,7 +214,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
             id="selectedDate"
             name="selectedDate"
             className="form-control form-control-lg"
-            selected={new Date(formik.values.selectedDate)} // Use selectedDate and slotTime
+            selected={formik.values.selectedDate} // Use selectedDate and slotTime
             onChange={(date) => formik.setFieldValue("selectedDate", date)}
             onBlur={formik.handleBlur} // Add onBlur event handler
             showTimeSelect={true}
