@@ -150,11 +150,11 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
     );
   }
   //move to next day if the current day is friday
-  // const isFriday = today.getDay() === 5;
+  const isFriday = today.getDay() === 5;
 
-  // const defaultSelectedDate = isFriday
-  //   ? moment(today).add(1, "day").valueOf() // Convert to timestamp
-  //   : selectedDate || today;
+  const defaultSelectedDate = isFriday
+    ? moment(today).add(1, "day").valueOf() // Convert to timestamp
+    : selectedDate || today;
   // console.log("defaultSelected Date: ", defaultSelectedDate);
 
   console.log("slotTime: ", formik.values.slotTime)
@@ -214,7 +214,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
             id="selectedDate"
             name="selectedDate"
             className="form-control form-control-lg"
-            selected={formik.values.selectedDate} // Use selectedDate and slotTime
+            selected={formik.values.selectedDate || defaultSelectedDate} // Use selectedDate and slotTime
             onChange={(date) => formik.setFieldValue("selectedDate", date)}
             onBlur={formik.handleBlur} // Add onBlur event handler
             showTimeSelect={true}
