@@ -24,6 +24,9 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
   const today = formatDate(new Date());
   console.log("Today - ", today)
 
+  const minTime = new Date();
+  minTime.setHours(9, 30);
+
   // updating field values in redux store
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -67,7 +70,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
       selectedDate: formatDate(selectedDate),
       title: "", // Add title field
       message: "", // Add message field
-      slotTime: null,
+      slotTime: moment().format("HH:mm"), // Set slotTime to current time
     },
     validationSchema: validationSchema, // Apply the validation schema
     onSubmit: (values) => {
@@ -152,6 +155,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
     : selectedDate || today;
   console.log("defaultSelected Date: ", defaultSelectedDate);
 
+  console.log("slotTime: ", formik.values.slotTime)
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="mb-3">
@@ -208,7 +212,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
             id="selectedDate"
             name="selectedDate"
             className="form-control form-control-lg"
-            selected={formik.values.selectedDate} // Use selectedDate prop here
+            selected={new Date(formik.values.selectedDate)} // Use selectedDate and slotTime
             onChange={(date) => formik.setFieldValue("selectedDate", date)}
             onBlur={formik.handleBlur} // Add onBlur event handler
             showTimeSelect={true}
@@ -217,7 +221,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
             dateFormat="MMMM d, yyyy h:mm aa"
             timeCaption="Time"
             minDate={new Date()} // Set minDate to the current date
-            minTime={new Date().setHours(9, 30)} // Set minTime to 9:30 AM
+            minTime={minTime} // Set minTime to 9:30 AM
             maxTime={new Date().setHours(19, 0)} // Set maxTime to 7:00 PM
             filterDate={(date) => date.getDay() !== 5} // Disable Fridays
             filterTime={(time) =>
