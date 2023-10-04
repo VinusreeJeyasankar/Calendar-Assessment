@@ -1,4 +1,5 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
+import moment from "moment";
 
 export const bookingFormSlice = createSlice({
   name: "bookingForm", // slice name in store
@@ -8,7 +9,7 @@ export const bookingFormSlice = createSlice({
     selectedDate: new Date().toISOString(),
     title: "",
     message: "",
-    slotTime: null,
+    slotTime: moment().format("HH:mm"), // Set slotTime to current time
   },
   reducers: {
     setFormField: (state, action) => {
