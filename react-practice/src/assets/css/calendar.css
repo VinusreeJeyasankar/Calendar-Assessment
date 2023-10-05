@@ -10,8 +10,9 @@
   background-color: rgb(109, 180, 241) !important;
 }
 .fc-day.fc-day-fri.holiday-msg {
-  color: #000;
-  padding-top: 50px;
+  color: #686262 !important;
+  /* padding-top: 50px; */
+  text-align: center;
   background-color: #f5c6cb !important;
 }
 /* to change the color of days in calendar */
@@ -19,7 +20,7 @@
   color: #000000 !important;
 }
 .clicked-date {
-  background-color: #f0c39a;
+  background-color: #f8d5a9;
 }
 .fc-customTitle-button {
   margin-right: 5px !important;
@@ -73,7 +74,7 @@
   padding: 12px;
 }
 .custom-modal {
-  max-width: 50%; /* Set the desired width (you can adjust the percentage as needed) */
+  max-width: 60%; /* Set the desired width (you can adjust the percentage as needed) */
   margin: 0 auto; /* Center the modal horizontally */
   font-size: 16px !important;
 }
@@ -144,8 +145,22 @@ label,
   color: rgb(0, 0, 212);
 }
 .fc-daygrid-day-frame{
-  height: 50px !important;
-  overflow-y: scroll !important;
+  height: 80px !important;
+  overflow-y: auto !important;
+}
+.scrollable-cell {
+  overflow-y: auto !important; /* Enable vertical scrollbar */
+  height: 50px !important; /* Set a maximum height for the cell */
+}
+/* Hiding scrollbar for Chrome, Safari and Opera */
+.scrollable-cell ::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hiding scrollbar for IE, Edge and Firefox */
+.scrollable-cell  {
+scrollbar-width: none;  /* Firefox */
+-ms-overflow-style: none;  /* IE and Edge */
 }
 /* Adjust styles for smaller screens */
 /* For smaller screens */
@@ -184,6 +199,24 @@ label,
   .fc-button {
     margin: 0.2em; /* Adjust the spacing for smaller screens */
   }
+  .fc-daygrid-day-frame{
+    height: 80px !important;
+    overflow-y: auto !important;
+  }
+  .scrollable-cell {
+    overflow-y: auto !important; /* Enable vertical scrollbar */
+    height: 50px !important; /* Set a maximum height for the cell */
+  }
+  /* Hiding scrollbar for Chrome, Safari and Opera */
+  .scrollable-cell ::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hiding scrollbar for IE, Edge and Firefox */
+  .scrollable-cell  {
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  }
 }
 @media (min-width: 1150px) {
   #calendarArea {
@@ -196,8 +229,26 @@ label,
     margin-left: 140px !important;
   }
   .custom-modal {
-    max-width: 40%; /* Set the desired width (you can adjust the percentage as needed) */
+    max-width: 55%; /* Set the desired width (you can adjust the percentage as needed) */
     margin: 0 auto; /* Center the modal horizontally */
     font-size: 16px !important;
+  }
+  .fc-daygrid-day-frame{
+    height: 80px !important;
+    overflow-y: auto !important;
+  }
+  .scrollable-cell {
+    overflow-y: auto !important; /* Enable vertical scrollbar */
+    height: 50px !important; /* Set a maximum height for the cell */
+  }
+  /* Hiding scrollbar for Chrome, Safari and Opera */
+  .scrollable-cell ::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hiding scrollbar for IE, Edge and Firefox */
+  .scrollable-cell  {
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
   }
 }
