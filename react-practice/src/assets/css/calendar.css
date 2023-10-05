@@ -130,6 +130,9 @@ label,
   margin-left: 10%;
   margin-right: 10%;
 }
+table, .form-control{
+  border: 1px solid rgb(202, 196, 196);
+}
 .booked-details, .search-field{
   font-size: large;
 }
