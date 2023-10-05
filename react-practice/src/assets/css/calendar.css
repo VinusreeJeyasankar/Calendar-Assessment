@@ -150,20 +150,20 @@ label,
 }
 .scrollable-cell {
   overflow-y: auto !important; /* Enable vertical scrollbar */
-  height: 50px !important; /* Set a maximum height for the cell */
+  height: 50px !important; 
 }
 /* Hiding scrollbar for Chrome, Safari and Opera */
 .scrollable-cell ::-webkit-scrollbar {
   display: none;
 }
-
 /* Hiding scrollbar for IE, Edge and Firefox */
 .scrollable-cell  {
-scrollbar-width: none;  /* Firefox */
--ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
 }
-/* Adjust styles for smaller screens */
-/* For smaller screens */
+
+/* Adjust styles for smaller screens...For smaller screens */
+
 @media (max-width: 768px) {
   .heading {
     width: 100% !important;
