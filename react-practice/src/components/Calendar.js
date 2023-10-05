@@ -27,6 +27,7 @@ function Calendar() {
     (state) => state.calendar.eventDetailsMode
   );
   const view = useSelector((state) => state.calendar.view);
+  const [scrollable, setScrollable] = useState(false);
 
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [clickedDate, setClickedDate] = useState(currentDate); // Add state for clicked date
@@ -101,7 +102,12 @@ function Calendar() {
         }
       }
     });    
-  
+    if (matchingBookings.length > 2) {
+      setScrollable(true);
+    } else {
+      setScrollable(false);
+    }
+    
     if (matchingBookings.length > 0) {
       const formattedDate = getCustomTitle(clickedDate);
       setSelectedEvent({
@@ -123,7 +129,7 @@ function Calendar() {
       }));
   
       arg.dayEl.classList.add("clicked-date");
-    } else {
+    }else {
       setSelectedEvent({
         title: "No booking is scheduled for today!!",
         start: clickedDate,
@@ -163,6 +169,11 @@ function Calendar() {
       arg.el.classList.add("fc-past-bg");
       arg.el.title = "Past Date";
     }
+
+    if (scrollable) {
+      arg.el.classList.add("scrollable-cell");
+    }
+    
   };
 
   const handleEventClick = (arg) => {
@@ -261,6 +272,7 @@ function Calendar() {
           <FullCalendar
             ref={calendarRef}
             plugins={[dayGridPlugin, interactionPlugin]}
+            // contentHeight={610}
             initialView={view}
             headerToolbar={{
               left: "prev,next today",
