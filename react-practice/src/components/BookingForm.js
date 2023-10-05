@@ -38,7 +38,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
     formik.handleChange(e); // Let formik handle the change event
     dispatch(setFormField({ field: name, value })); // Update Redux store
     // Log the current formik values before dispatching
-    console.log("After dispatch:", formik.values);
+    // console.log("After dispatch:", formik.values);
   };
   const maxRecruiterCount = 5;
 
@@ -80,7 +80,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
     validationSchema: validationSchema, // Apply the validation schema
     onSubmit: (values) => {
       // Format the selected date and time using moment
-      console.log("values.selectedDate:", values.selectedDate);
+      // console.log("values.selectedDate:", values.selectedDate);
       const formattedSlotTime = moment(values.selectedDate).format();
 
       // Store the booking with slot information
@@ -130,7 +130,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
       onClose();
     },
   });
-  console.log("selectedDate : ", selectedDate)
+  // console.log("selectedDate : ", selectedDate)
   // Check if all recruiters have reached their limit for the selected day
   const isAllRecruitersFull = recruiterOptions.every((recruiter) => {
     const selectedDate = formik.values.selectedDate;
