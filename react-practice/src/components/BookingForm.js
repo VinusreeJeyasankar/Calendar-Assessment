@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setEvents } from "../store/calendar/CalendarSlice";
 import { setFormField } from "../store/bookings/BookingFormSlice";
@@ -10,8 +10,11 @@ import { useFormik } from "formik";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Button } from "react-bootstrap";
 import validationSchema from "./ValidationSchema";
+
 
 const recruiterOptions = [
   { value: "Mark Collins", label: "Mark Collins" },
@@ -135,20 +138,17 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
       getRecruiterCount(recruiter.value, selectedDate) >= maxRecruiterCount
     );
   });
+  // Use useEffect to display the toast message
+  useEffect(() => {
+    if (isAllRecruitersFull) {
+      toast.error(`No booking or recruiters available for ${moment(formik.values.selectedDate).format("MMMM D, YYYY")}`, {
+        position: "top-center",
+        className: "bg-dark text-white",
+        autoClose: 3000, // Set the duration for the toast to be displayed (in milliseconds)
+      });
+    }
+  }, [isAllRecruitersFull, formik.values.selectedDate]);
 
-  if (isAllRecruitersFull) {
-    return (
-      <>
-        <div className="noBookings mb-3">
-          No Recruiters or bookings available for this day,
-          {moment(formik.values.selectedDate).format("MMMM D, YYYY")}.
-        </div>
-        <button className="btn btn-danger" onClick={onClose}>
-          Close
-        </button>
-      </>
-    );
-  }
   //move to next day if the current day is friday
   const isFriday = today.getDay() === 5;
 
@@ -222,7 +222,7 @@ function BookingForm({ onSubmit, onClose, selectedDate }) {
             timeIntervals={30}
             dateFormat="MMMM d, yyyy h:mm aa"
             timeCaption="Time"
-            minDate={new Date()} // Set minDate to the current date
+            // minDate={new Date()} // Set minDate to the current date
             minTime={minTime} // Set minTime to 9:30 AM
             maxTime={new Date().setHours(19, 0)} // Set maxTime to 7:00 PM
             filterDate={(date) => date.getDay() !== 5} // Disable Fridays
