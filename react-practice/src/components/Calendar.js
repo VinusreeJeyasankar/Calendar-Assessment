@@ -5,7 +5,7 @@ import {
   setIsModalOpen,
   setIsEventModal,
   setEventDetailsMode,
-  setView
+  setView,
 } from "../store/calendar/CalendarSlice";
 import { formatDate } from "../utils/helper/dateHelper";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -18,6 +18,17 @@ import BookModal from "./BookModal";
 const currentDate = formatDate(new Date());
 currentDate.setDate(currentDate.getDate() - 1); // Subtract one day
 
+const renderEventContent = (eventInfo) => {
+  return (
+    <>
+      <b style={{ color: eventInfo.event.extendedProps.color }}>
+        {eventInfo.timeText}
+      </b>
+      <i>{eventInfo.event.title}</i>
+    </>
+  );
+};
+
 function Calendar() {
   const dispatch = useDispatch();
   const events = useSelector((state) => state.calendar.events);
@@ -28,25 +39,40 @@ function Calendar() {
   );
   const view = useSelector((state) => state.calendar.view);
   const [scrollable, setScrollable] = useState(false);
-  
+
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [clickedDate, setClickedDate] = useState(currentDate); // Add state for clicked date
   const calendarRef = useRef(null);
 
   useEffect(() => {
     const storedBookings = JSON.parse(localStorage.getItem("bookings")) || [];
-    const formattedEvents = storedBookings.map((booking) => ({
-      title: booking.title,
-      start: booking.slotTime,
-    }));
+    const formattedEvents = storedBookings.map((booking, index) => {
+      const start = new Date(booking.slotTime);
+      const dayOfWeek = start.getDay(); // 0 for Sunday, 1 for Monday, etc.
+      const color = weekcolor(dayOfWeek);
+      
+      return {
+        title: booking.title,
+        start: booking.slotTime,
+        color: color, // Make sure to include a color property
+        id: index,
+      };
+    });
+    
+    function weekcolor(dayOfWeek) {
+      // Generate a color based on the day of the week
+      const colors = ['#FF5733', '#84499e', '#62499e', '#427ea1', '#9c4161', '#41979c', '#419c74'];
+      return colors[dayOfWeek % colors.length];
+    }
+    
+    
     dispatch(setEvents(formattedEvents));
     console.log("formattedEvents: ", formattedEvents);
-
   }, [dispatch]);
 
   const handleBookSlotClick = () => {
     dispatch(setIsModalOpen(true));
-    dispatch(setIsEventModal(false)); 
+    dispatch(setIsEventModal(false));
     dispatch(setEventDetailsMode(false)); // Automatically hide event details mode
   };
 
@@ -57,14 +83,14 @@ function Calendar() {
   // Click event - for selected Dates
   const handleDateClick = (arg) => {
     const clickedDate = new Date(arg.date);
-  
+
     if (clickedDate.getDay() === 5) {
       return; // Do nothing if it's a Friday
     }
-  
+
     const today = new Date();
     today.setDate(today.getDate() - 1); // Subtract one day
-  
+
     if (clickedDate < today) {
       return; // If it's in the past, prevent further actions
     }
@@ -73,7 +99,7 @@ function Calendar() {
     if (prevSelectedDateEl) {
       prevSelectedDateEl.classList.remove("clicked-date");
     }
-  
+
     const matchingBookings = [];
     //getting booked event from storage to display on events modal
     events.forEach((event) => {
@@ -83,14 +109,14 @@ function Calendar() {
         eventDate.getMonth() === clickedDate.getMonth() &&
         eventDate.getDate() === clickedDate.getDate()
       ) {
-        const storedBookings = JSON.parse(localStorage.getItem("bookings")) || [];
+        const storedBookings =
+          JSON.parse(localStorage.getItem("bookings")) || [];
         const matchingBooking = storedBookings.find((booking) => {
           return (
-            booking.title === event.title &&
-            booking.slotTime === event.start
+            booking.title === event.title && booking.slotTime === event.start
           );
         });
-    
+
         if (matchingBooking) {
           matchingBookings.push({
             title: matchingBooking.title,
@@ -101,13 +127,13 @@ function Calendar() {
           });
         }
       }
-    });    
+    });
     if (matchingBookings.length > 2) {
       setScrollable(true);
     } else {
       setScrollable(false);
     }
-    
+
     if (matchingBookings.length > 0) {
       const formattedDate = getCustomTitle(clickedDate);
       setSelectedEvent({
@@ -116,38 +142,38 @@ function Calendar() {
         bookings: matchingBookings,
         slotTime: new Date(),
       });
-  
+
       dispatch(setIsModalOpen(true));
       dispatch(setIsEventModal(true));
       dispatch(setEventDetailsMode(true));
-  
+
       const defaultSlotTime = new Date();
-  
+
       setSelectedEvent((prevEvent) => ({
         ...prevEvent,
         slotTime: defaultSlotTime,
       }));
-  
+
       arg.dayEl.classList.add("clicked-date");
-    }else {
+    } else {
       setSelectedEvent({
         title: "No booking is scheduled for today!!",
         start: clickedDate,
         bookings: [],
         slotTime: new Date(),
       });
-  
+
       dispatch(setIsModalOpen(true));
       dispatch(setIsEventModal(true));
       dispatch(setEventDetailsMode(true));
-  
+
       const defaultSlotTime = new Date();
-  
+
       setSelectedEvent((prevEvent) => ({
         ...prevEvent,
         slotTime: defaultSlotTime,
       }));
-  
+
       arg.dayEl.classList.add("clicked-date");
     }
   };
@@ -173,7 +199,6 @@ function Calendar() {
     if (scrollable) {
       arg.el.classList.add("scrollable-cell");
     }
-    
   };
 
   const handleEventClick = (arg) => {
@@ -189,7 +214,8 @@ function Calendar() {
     const matchingBookings = storedBookings.filter((booking) => {
       return (
         booking.title === clickedEvent.title &&
-        formatDate(new Date(booking.slotTime)).getTime() === clickedEvent.start.getTime()
+        formatDate(new Date(booking.slotTime)).getTime() ===
+          clickedEvent.start.getTime()
       );
     });
 
@@ -203,33 +229,37 @@ function Calendar() {
     dispatch(setIsEventModal(true));
     dispatch(setEventDetailsMode(true)); // Automatically show event details mode
   };
-  
+
   //function to update eventDetailsMode
   const updateEventDetailsMode = (mode) => {
     dispatch(setEventDetailsMode(mode));
   };
-  
+
   const handleDeleteEvent = () => {
     if (!selectedEvent || !selectedEvent.title) {
-      console.error('No event selected or event has no title');
+      console.error("No event selected or event has no title");
       return;
     }
-  
+
     // Remove event from Redux state
-    const updatedEvents = events.filter(event => (
-      event.title !== selectedEvent.title ||
-      new Date(event.start).toString() !== new Date(selectedEvent.start).toString()
-    ));
+    const updatedEvents = events.filter(
+      (event) =>
+        event.title !== selectedEvent.title ||
+        new Date(event.start).toString() !==
+          new Date(selectedEvent.start).toString()
+    );
     dispatch(setEvents(updatedEvents));
-  
+
     // Remove event from local storage
-    const storedBookings = JSON.parse(localStorage.getItem('bookings')) || [];
-    const updatedBookings = storedBookings.filter(booking => (
-      booking.title !== selectedEvent.title ||
-      new Date(booking.slotTime).toString() !== new Date(selectedEvent.start).toString()
-    ));
-    localStorage.setItem('bookings', JSON.stringify(updatedBookings));
-  
+    const storedBookings = JSON.parse(localStorage.getItem("bookings")) || [];
+    const updatedBookings = storedBookings.filter(
+      (booking) =>
+        booking.title !== selectedEvent.title ||
+        new Date(booking.slotTime).toString() !==
+          new Date(selectedEvent.start).toString()
+    );
+    localStorage.setItem("bookings", JSON.stringify(updatedBookings));
+
     // Close the modal and reset event details mode
     setEventDetailsMode(false);
     setIsEventModal(false);
@@ -238,7 +268,6 @@ function Calendar() {
     //close the modal after event deleted
     handleCloseModal();
   };
-  
 
   const handleViewToggle = () => {
     const newView = view === "dayGridMonth" ? "dayGridWeek" : "dayGridMonth";
@@ -272,7 +301,7 @@ function Calendar() {
           <FullCalendar
             ref={calendarRef}
             plugins={[dayGridPlugin, interactionPlugin]}
-            // contentHeight={550}
+            contentHeight={550}
             initialView={view}
             headerToolbar={{
               left: "prev,next today",
@@ -298,7 +327,7 @@ function Calendar() {
             eventClick={handleEventClick}
             dateClick={handleDateClick}
             dayCellDidMount={handleDayCellDidMount}
-            eventDisplay={'block'} // Set eventDisplay to 'block'
+            eventDisplay={"block"} // Set eventDisplay to 'block'
           />
         </div>
       </div>
@@ -313,6 +342,7 @@ function Calendar() {
           setEventDetailsMode={setEventDetailsMode}
           updateEventDetailsMode={updateEventDetailsMode}
           onDelete={handleDeleteEvent}
+          eventContent={renderEventContent}
         />
       )}
     </div>
