@@ -28,7 +28,7 @@ function Calendar() {
   );
   const view = useSelector((state) => state.calendar.view);
   const [scrollable, setScrollable] = useState(false);
-
+  
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [clickedDate, setClickedDate] = useState(currentDate); // Add state for clicked date
   const calendarRef = useRef(null);
@@ -272,7 +272,7 @@ function Calendar() {
           <FullCalendar
             ref={calendarRef}
             plugins={[dayGridPlugin, interactionPlugin]}
-            // contentHeight={610}
+            // contentHeight={550}
             initialView={view}
             headerToolbar={{
               left: "prev,next today",
@@ -298,6 +298,7 @@ function Calendar() {
             eventClick={handleEventClick}
             dateClick={handleDateClick}
             dayCellDidMount={handleDayCellDidMount}
+            eventDisplay={'block'} // Set eventDisplay to 'block'
           />
         </div>
       </div>
