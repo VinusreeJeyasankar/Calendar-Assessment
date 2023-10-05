@@ -10,6 +10,7 @@ const calendarSlice = createSlice({
   name: "calendar",
   initialState: {
     events: [], // Initial state for events
+    // groupedEvents: {}, // New state to store grouped events
     isModalOpen: false,
     isEventModal: false,
     eventDetailsMode: false,
@@ -17,6 +18,7 @@ const calendarSlice = createSlice({
   },
   reducers: {
     setEvents: updateState('events'),
+    // setGroupedEvents: updateState('groupedEvents'),
     setIsModalOpen: updateState('isModalOpen'),
     setIsEventModal: updateState('isEventModal'),
     setEventDetailsMode: updateState('eventDetailsMode'),
@@ -26,6 +28,7 @@ const calendarSlice = createSlice({
 
 export const {
   setEvents,
+  // setGroupedEvents,
   setIsModalOpen,
   setIsEventModal,
   setEventDetailsMode,
